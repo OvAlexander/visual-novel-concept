@@ -1,0 +1,31 @@
+export const SCENE_KEYS = {
+  PRELOAD: 'PRELOAD',
+  TITLE: 'TITLE',
+  GAME: 'GAME',
+  TEST: 'TEST',
+  MENU: 'MENU',
+  SETTING: 'SETTING',
+  UI: 'UI'
+} as const;
+
+export const ASSET_KEYS = {
+  TITLE: 'TITLE',
+  CLICK_TO_START: 'CLICK_TO_START',
+  CARDS: 'CARDS',
+  LILAC_ONE: 'LILAC_ONE',
+  LILAC_TWO: 'LILAC_TWO',
+  LILAC_THREE: 'LILAC_THERE',
+  MP3: 'MP3',
+  VINYL: 'VINYL',
+  JOURNAL: 'JOURNAL',
+  EYE: 'EYE', 
+  FASTFORWARD: 'FASTFORWARD',
+  FILE: 'FILE',
+  SAVE: 'SAVE',
+  SETTINGS: 'SETTINGS',
+  UNDO: 'UNDO',
+  DAFFY: 'DAFFY',
+} as const;
+
+export const CARD_WIDTH = 37;
+export const CARD_HEIGHT = 52;
