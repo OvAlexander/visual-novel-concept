@@ -1,79 +1,89 @@
 import * as Phaser from 'phaser';
 // import Phaser from '../../../lib/phaser.js';
 import { ASSET_KEYS, SCENE_KEYS } from '../../scenes/common';
+import { TextParser } from '../textparser';
+import { Character } from '../character/character';
 
-export class Dialouge {
+//TODO MAKE AN UPDATE FUNCTION
+export class Dialogue {
   /** @protected @type {Phaser.Scene} */
   _scene;
-
   /** @type {Phaser.Scene} */
   #scene;
-  /** @type {Phaser.GameObjects.Container} */
-  #mainBattleMenuPhaserContainerGameObject;
+
   /** @type {Phaser.GameObjects.Container} */
   #mainTextAreaContainerGameObject;
+
   /** @type {Phaser.GameObjects.Container} */
-  #moveSelectionSubBattleMenuPhaserContainerGameObject;
-  // /** @type {Phaser.GameObjects.Container} */
-  // #createTextAreaSubPane;
+  #choiceTextAreaContainerGameObject;
+
   /** @type {Phaser.GameObjects.Text} */
-  #dialougeTextObject;
+  #dialogueTextObject;
   /** @type {Phaser.GameObjects.Text} */
   #nameTextObject;
+  /** @type {Phaser.GameObjects.Text} */
+  #autoTextObject;
+
+  /** @type {Phaser.GameObjects.Text} */
+  #choiceOneTextObject;
+  /** @type {Phaser.GameObjects.Text} */
+  #choiceTwoTextObject;
+  /** @type {Phaser.GameObjects.Text} */
+  #choiceThreeTextObject;
+
   /** @type {Phaser.GameObjects.Rectangle} */
   #nextBtn;
   /** @type {Phaser.GameObjects.Rectangle} */
   #resetBtn;
+  /** @type {Phaser.GameObjects.Rectangle} */
+  #dialogueBkgnd;
+  /** @type {Phaser.GameObjects.Rectangle} */
+  #nameBkgnd;
 
+  /** @type {Phaser.GameObjects.Rectangle} */
+  #choiceBkgnd;
+  /** @type {Phaser.GameObjects.Rectangle} */
+  #choiceOne;
+  /** @type {Phaser.GameObjects.Rectangle} */
+  #choiceTwo;
+  /** @type {Phaser.GameObjects.Rectangle} */
+  #choiceThree;
+
+  /**@type {TextParser} */
+  parser;
+
+  /** @type {Character} */
+  #character;
+
+  /** @type {DialogueLine} */
+  dialogueLine;
+  /** @type {DialogueLine[]} */
+  script;
+
+  /** @type {integer} */
+  dialogueCounter = 0;
+  /** @type {integer} */
+  scriptCounter = 0;
   /** @type {integer} */
   #xPos;
   /** @type {integer} */
   #yPos;
   /** @type {string} */
-  #name;
+  name;
   /** @type {string} */
-  #dialouge;
+  #dialogue;
+  /** @type {string} */
+  chapter;
 
-  /** @type {Phaser.GameObjects.Rectangle} */
-  #dialougeBkgnd;
-  /** @type {Phaser.GameObjects.Rectangle} */
-  #nameBkgnd;
-  /** @type {Phaser.GameObjects.Image} */
-  #mainBattleMenuCursorPhaserImageGameObject;
-  /** @type {Phaser.GameObjects.Image} */
-  #attackBattleMenuCursorPhaserImageGameObject;
-  /** @type {import('./battle-menu-options.js').BattleMenuOptions} */
-  #selectedBattleMenuOption;
-  /** @type {import('./battle-menu-options.js').AttackMoveOptions} */
-  #selectedAttackMenuOption;
-  /** @type {import('./battle-menu-options.js').ActiveBattleMenu} */
-  #activeBattleMenu;
-  /** @type {string[]} */
-  #queuedInfoPanelMessages;
-  /** @type {() => void | undefined} */
-  #queuedInfoPanelCallback;
   /** @type {boolean} */
-  #waitingForPlayerInput;
-  /** @type {number | undefined} */
-  #selectedAttackIndex;
-  /** @type {BattleMonster} */
-  #activePlayerMonster;
-  /** @type {Phaser.GameObjects.Image} */
-  #userInputCursorPhaserImageGameObject;
-  /** @type {Phaser.Tweens.Tween} */
-  #userInputCursorPhaserTween;
+  auto = false;
   /** @type {boolean} */
-  #skipAnimations;
+  hidden = false;
   /** @type {boolean} */
-  #queuedMessageAnimationPlaying;
-  /** @type {import('../../../types/typedef.js').Item | undefined} */
-  #usedItem;
-  /** @type {boolean} */
-  #fleeAttempt;
-  /** @type {boolean} */
-  #switchMonsterAttempt;
-  /** @type {boolean} */
-  #wasItemUsed;
+  hiddenChoices = false;
+
+  #timerId: ReturnType<typeof setInterval> | null = null;
+  intervalId;
 
   /**
    *
@@ -82,253 +92,148 @@ export class Dialouge {
    * @param {boolean} [skipBattleAnimations=false] used to skip all animations tied to the battle
    */
 
-  constructor(scene, config, xPos, yPos, name, dialouge) {
+  constructor(scene, config, xPos, yPos, chapter, character) {
     this.#scene = scene;
-    this.#name = name;
-    this.#dialouge = dialouge;
+    this.name = name;
+    // this.#dialogue = dialogue;
     this.#xPos = xPos;
     this.#yPos = yPos;
-    this.#createTextArea(this.#xPos, this.#yPos, this.#name, this.#dialouge);
+    this.#character = character;
+
+    this.parser = new TextParser();
+    this.chapter = chapter;
+    this.script = this.parser.parse(chapter);
+    console.log(this.script);
+    this.name = this.script[0].character;
+    this.#dialogue = this.script[0].text;
+    this.#createTextArea(this.#xPos, this.#yPos, this.name, this.#dialogue);
     this.#createResetButton(this.#scene);
-  }
-
-  // /** @type {number | undefined} */
-  // get selectedAttack() {
-  //   if (this.#activeBattleMenu === ACTIVE_BATTLE_MENU.BATTLE_MOVE_SELECT) {
-  //     return this.#selectedAttackIndex;
-  //   }
-  //   return undefined;
-  // }
-
-  /** @type {boolean} */
-  get wasItemUsed() {
-    return this.#wasItemUsed;
-  }
-
-  /** @type {import('../../../types/typedef.js').Item | undefined} */
-  get itemUsed() {
-    return this.#usedItem;
-  }
-
-  /** @type {boolean} */
-  get isAttemptingToFlee() {
-    return this.#fleeAttempt;
-  }
-
-  /** @type {boolean} */
-  get isAttemptingToSwitchMonsters() {
-    return this.#switchMonsterAttempt;
-  }
-
-  /**
-   * Trigger to update the attack names after a monster has changed in the battle scene.
-   * @returns {void}
-   */
-  updateDialogue() {
-    this.#moveSelectionSubBattleMenuPhaserContainerGameObject.getAll().forEach((gameObject) => {
-      if (gameObject.type === 'text') {
-        /** @type {Phaser.GameObjects.Text} */
-        gameObject.setText('-');
-      }
-    });
-    this.#activePlayerMonster.attacks.forEach((attack, index) => {
-      /** @type {Phaser.GameObjects.Text} */
-      this.#moveSelectionSubBattleMenuPhaserContainerGameObject.getAt(index).setText(attack.name);
-    });
+    this.#createChoiceArea(this.#xPos, this.#yPos, ['','','']);
   }
 
   /**
    * @returns {void}
    */
   showDialogue() {
-    // this.#activeBattleMenu = ACTIVE_BATTLE_MENU.BATTLE_MAIN;
-    this.#name.setText('Daffy');
-    this.#dialouge.setText('Heyyy');
-    this.#mainBattleMenuPhaserContainerGameObject.setAlpha(1);
-    this.#dialouge.setAlpha(1);
-    this.#name.setAlpha(1);
-
-    // this.#selectedBattleMenuOption = BATTLE_MENU_OPTIONS.FIGHT;
-    // this.#mainBattleMenuCursorPhaserImageGameObject.setPosition(BATTLE_MENU_CURSOR_POS.x, BATTLE_MENU_CURSOR_POS.y);
-    this.#selectedAttackIndex = undefined;
-    this.#wasItemUsed = false;
-    this.#fleeAttempt = false;
-    this.#switchMonsterAttempt = false;
-    this.#usedItem = undefined;
+    this.#dialogueTextObject.setAlpha(1);
+    this.#dialogueBkgnd.setAlpha(1);
+    this.#nameTextObject.setAlpha(1);
+    this.#nameBkgnd.setAlpha(1);
+    this.hidden = false;
   }
 
   /**
    * @returns {void}
    */
-  hideDialouge() {
-    this.#mainBattleMenuPhaserContainerGameObject.setAlpha(0);
-    this.#dialouge.setAlpha(0);
-    this.#name.setAlpha(0);
-  }
-
-  // /**
-  //  * @returns {void}
-  //  */
-  // playInputCursorAnimation() {
-  //   this.#userInputCursorPhaserImageGameObject.setPosition(
-  //     this.#battleTextGameObjectLine1.displayWidth + this.#userInputCursorPhaserImageGameObject.displayWidth * 2.7,
-  //     this.#userInputCursorPhaserImageGameObject.y
-  //   );
-  //   this.#userInputCursorPhaserImageGameObject.setAlpha(1);
-  //   this.#userInputCursorPhaserTween.restart();
-  // }
-
-  // /**
-  //  * @returns {void}
-  //  */
-  // hideInputCursor() {
-  //   this.#userInputCursorPhaserImageGameObject.setAlpha(0);
-  //   this.#userInputCursorPhaserTween.pause();
-  // }
-
-  /**
-   * @param {import('../../../common/direction.js').Direction|'OK'|'CANCEL'} input
-   * @returns {void}
-   */
-  handlePlayerInput(input) {
-    if (this.#queuedMessageAnimationPlaying && input === 'OK') {
-      return;
-    }
-
-    if (this.#waitingForPlayerInput && (input === 'CANCEL' || input === 'OK')) {
-      this.#updateInfoPaneWithMessage();
-      return;
-    }
-
-    if (input === 'CANCEL') {
-      this.#switchToMainBattleMenu();
-      return;
-    }
-    // if (input === 'OK') {
-    //   if (this.#activeBattleMenu === ACTIVE_BATTLE_MENU.BATTLE_MAIN) {
-    //     this.#handlePlayerChooseMainBattleOption();
-    //     return;
-    //   }
-    //   if (this.#activeBattleMenu === ACTIVE_BATTLE_MENU.BATTLE_MOVE_SELECT) {
-    //     this.#handlePlayerChooseAttack();
-    //     return;
-    //   }
-    //   return;
-    // }
-    // this.#updateSelectedBattleMenuOptionFromInput(input);
-    // this.#updateSelectedMoveMenuOptionFromInput(input);
-    // this.#moveMainBattleMenuCursor();
-    // this.#moveMoveSelectBattleMenuCursor();
+  hideDialogue() {
+    this.#dialogueTextObject.setAlpha(0);
+    this.#dialogueBkgnd.setAlpha(0);
+    this.#nameTextObject.setAlpha(0);
+    this.#nameBkgnd.setAlpha(0);
+    this.hidden = true;
   }
 
   /**
-   * @param {string} message
-   * @param {() => void} [callback]
    * @returns {void}
    */
-  updateInfoPaneMessageNoInputRequired(message, callback) {
-    // this.#battleTextGameObjectLine1.setText('').setAlpha(1);
+  showChoices() {
+    // this.#choiceBkgnd.setAlpha(1);
+    console.log('Showing choices');
+    this.#choiceOne.setAlpha(1);
+    this.#choiceOneTextObject.setAlpha(1);
+    this.#choiceTwo.setAlpha(1);
+    this.#choiceTwoTextObject.setAlpha(1);
+    this.#choiceThree.setAlpha(1);
+    this.#choiceThreeTextObject.setAlpha(1);
+    this.#nextBtn.setAlpha(0);
+    this.hideDialogue();
+    this.hiddenChoices = false;
+  }
 
-    if (this.#skipAnimations) {
-      // this.#battleTextGameObjectLine1.setText(message);
-      this.#waitingForPlayerInput = false;
-      if (callback) {
-        callback();
+  /**
+   * @returns {void}
+   */
+  hideChoices() {
+    // this.#choiceBkgnd.setAlpha(0);
+    console.log('Hiding choices');
+    this.#choiceOne.setAlpha(0);
+    this.#choiceOneTextObject.setAlpha(0);
+    this.#choiceTwo.setAlpha(0);
+    this.#choiceTwoTextObject.setAlpha(0);
+    this.#choiceThree.setAlpha(0);
+    this.#choiceThreeTextObject.setAlpha(0);
+    this.#nextBtn.setAlpha(1);  
+    this.showDialogue()
+    this.hiddenChoices = true;
+  }
+
+  undoDialogue() {
+    if (this.script.length === 0) {
+      return;
+    } else if (this.scriptCounter <= 0) {
+      return;
+    } else {
+      this.scriptCounter -= 1;
+      if (this.script[this.scriptCounter].choices) {
+        console.log('Here');
+        this.showChoices();
+        this.updateChoices(this.script[this.scriptCounter].choices);
+      } else {
+        console.log('Here 2');
+        this.hideChoices();
       }
-      return;
+      this.#nameTextObject.setText(this.script[this.scriptCounter].character);
+      this.#dialogueTextObject.setText(this.script[this.scriptCounter].text);
     }
-
-    // animateText(this.#scene, this.#battleTextGameObjectLine1, message, {
-    //   delay: dataManager.getAnimatedTextSpeed(),
-    //   callback: () => {
-    //     this.#waitingForPlayerInput = false;
-    //     if (callback) {
-    //       callback();
-    //     }
-    //   },
-    // });
   }
 
-  /**
-   * @param {string[]} messages
-   * @param {() => void} [callback]
-   * @returns {void}
-   */
-  updateInfoPaneMessagesAndWaitForInput(messages, callback) {
-    this.#queuedInfoPanelMessages = messages;
-    this.#queuedInfoPanelCallback = callback;
+  autoDialogue() {
+    if (this.auto) {
+      console.log('Auto Off');
+      this.auto = false;
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+      this.#autoTextObject.setAlpha(0);
+    } else {
+      console.log('Auto On');
+      this.auto = true;
+      this.#autoTextObject.setAlpha(1);
+      console.log(this.scriptCounter);
 
-    this.#updateInfoPaneWithMessage();
+      this.intervalId = setInterval(() => {
+        if (this.scriptCounter >= this.script.length - 1) {
+          this.#autoTextObject.setAlpha(0);
+          console.log('Toggling off');
+          this.auto = false;
+          clearInterval(this.intervalId);
+          this.intervalId = null;
+          return;
+        }
+        this.scriptCounter++;
+        if (this.script[this.scriptCounter].choices) {
+          this.#autoTextObject.setAlpha(0);
+          this.showChoices();
+          this.updateChoices(this.script[this.scriptCounter].choices);
+          console.log('Toggling off');
+          this.auto = false;
+          clearInterval(this.intervalId);
+          this.intervalId = null;
+          return;
+        } else {
+          console.log('Here 2');
+          this.hideChoices();
+        }
+        this.#nameTextObject.setText(this.script[this.scriptCounter].character);
+        this.#dialogueTextObject.setText(this.script[this.scriptCounter].text);
+        console.log('Auto-incremented to:', this.scriptCounter);
+      }, 2000);
+    }
+  }
+  updateName(name) {
+    this.name = name;
+    this.#nameTextObject.setText(name);
   }
 
-  /**
-   * @returns {void}
-   */
-  #updateInfoPaneWithMessage() {
-    this.#waitingForPlayerInput = false;
-    // this.#battleTextGameObjectLine1.setText('').setAlpha(1);
-    // this.hideInputCursor();
-
-    // check if all messages have been displayed from the queue and call the callback
-    if (this.#queuedInfoPanelMessages.length === 0) {
-      if (this.#queuedInfoPanelCallback) {
-        this.#queuedInfoPanelCallback();
-        this.#queuedInfoPanelCallback = undefined;
-      }
-      return;
-    }
-
-    // get first message from queue and animate message
-    const messageToDisplay = this.#queuedInfoPanelMessages.shift();
-
-    if (this.#skipAnimations) {
-      // this.#battleTextGameObjectLine1.setText(messageToDisplay);
-      this.#queuedMessageAnimationPlaying = false;
-      this.#waitingForPlayerInput = true;
-      // this.playInputCursorAnimation();
-      return;
-    }
-
-    this.#queuedMessageAnimationPlaying = true;
-    // animateText(this.#scene, this.#battleTextGameObjectLine1, messageToDisplay, {
-    //   delay: dataManager.getAnimatedTextSpeed(),
-    //   callback: () => {
-    //     this.playInputCursorAnimation();
-    //     this.#waitingForPlayerInput = true;
-    //     this.#queuedMessageAnimationPlaying = false;
-    //   },
-    // });
-  }
-
-  // /**
-  //  * @returns {void}
-  //  */
-  // #createMainBattleMenu() {
-  //   this.#name = this.#scene.add.text(20, 468, 'what should', {
-  //     ...BATTLE_UI_TEXT_STYLE,
-  //     ...{
-  //       wordWrap: {
-  //         width: this.#scene.scale.width - 55,
-  //       },
-  //     },
-  //   });
-  //   this.#dialouge = this.#scene.add.text(20, 512, `${this.#activePlayerMonster.name} do next?`, BATTLE_UI_TEXT_STYLE);
-
-  //   this.#mainBattleMenuCursorPhaserImageGameObject = this.#scene.add
-  //     .image(BATTLE_MENU_CURSOR_POS.x, BATTLE_MENU_CURSOR_POS.y, UI_ASSET_KEYS.CURSOR, 0)
-  //     .setOrigin(0.5)
-  //     .setScale(2.5);
-
-  //   this.#mainBattleMenuPhaserContainerGameObject = this.#scene.add.container(520, 448, [
-  //     this.#createMainInfoSubPane(),
-  //     this.#scene.add.text(55, 22, DIALOUGE_OPTIONS.ONE, BATTLE_UI_TEXT_STYLE),
-  //     this.#scene.add.text(240, 22, DIALOUGE_OPTIONS.TWO, BATTLE_UI_TEXT_STYLE),
-  //     this.#scene.add.text(55, 70, DIALOUGE_OPTIONS.THREE, BATTLE_UI_TEXT_STYLE),
-  //     this.#mainBattleMenuCursorPhaserImageGameObject,
-  //   ]);
-
-  //   this.hideMainBattleMenu();
-  // }
   #createNameBkgnd() {
     let nameBkgndX = (this.#scene.scale.width / 20) * 1.5;
     let nameBkgndY = (this.#scene.scale.height / 20) * 12;
@@ -355,32 +260,31 @@ export class Dialouge {
     return this.#nameTextObject;
   }
 
-  #createDialougeBkgnd() {
-    let dialougeBkgndX = this.#scene.scale.width / 20;
-    let dialougeBkgndY = (this.#scene.scale.height / 20) * 14;
-    let dialougeBkgndWidth = (this.#scene.scale.width / 20) * 18;
-    let dialougeBkgndHeight = (this.#scene.scale.height / 20) * 5;
-    let dialougeBkgndColor = 0xff00ff;
-    this.#dialougeBkgnd = this.#scene.add
-      .rectangle(dialougeBkgndX, dialougeBkgndY, dialougeBkgndWidth, dialougeBkgndHeight, dialougeBkgndColor)
+  #createDialogueBkgnd() {
+    let dialogueBkgndX = this.#scene.scale.width / 20;
+    let dialogueBkgndY = (this.#scene.scale.height / 20) * 14;
+    let dialogueBkgndWidth = (this.#scene.scale.width / 20) * 18;
+    let dialogueBkgndHeight = (this.#scene.scale.height / 20) * 5;
+    let dialogueBkgndColor = 0xff00ff;
+    this.#dialogueBkgnd = this.#scene.add
+      .rectangle(dialogueBkgndX, dialogueBkgndY, dialogueBkgndWidth, dialogueBkgndHeight, dialogueBkgndColor)
       .setOrigin(0)
       .setAlpha(1);
-    return this.#dialougeBkgnd;
+    return this.#dialogueBkgnd;
   }
 
-  #createDialouge(dialouge) {
-    this.#dialougeTextObject = this.#scene.add
-      .text((this.#scene.game.scale.width / 20) * 1.25, (this.#scene.game.scale.height / 20) * 14.25, dialouge[0], {
+  #createDialogue(dialogue) {
+    this.#dialogueTextObject = this.#scene.add
+      .text((this.#scene.game.scale.width / 20) * 1.25, (this.#scene.game.scale.height / 20) * 14.25, dialogue, {
         fontSize: '40px',
         fontFamily: 'daffy',
       })
       .setOrigin(0)
       .setWordWrapWidth((this.#scene.game.scale.width / 20) * 18);
-    return this.#dialougeTextObject;
+    return this.#dialogueTextObject;
   }
 
-  #createNextButton(dialouge) {
-    let diaglougeCounter = 0;
+  #createNextButton(chapter) {
     this.#nextBtn = this.#scene.add
       .rectangle(
         (this.#scene.game.scale.width / 20) * 18.25,
@@ -393,21 +297,38 @@ export class Dialouge {
       .setAlpha(1)
       .setInteractive();
 
+    this.script = this.parser.parse(chapter);
     this.#nextBtn.on(Phaser.Input.Events.POINTER_DOWN, () => {
-      if (dialouge.length === 0) {
+      console.log(this.script);
+      if (this.script.length === 0) {
         return;
-      } else if (diaglougeCounter >= dialouge.length - 1) {
+      } else if (this.scriptCounter >= this.script.length - 1) {
         return;
       } else {
-        diaglougeCounter += 1;
-        this.#dialougeTextObject.setText(dialouge[diaglougeCounter]);
+        this.scriptCounter += 1;
+        console.log(this.script[this.scriptCounter].choices);
+        console.log(this.scriptCounter);
+        if (this.script[this.scriptCounter].choices) {
+          console.log('Here');
+          this.showChoices();
+          this.updateChoices(this.script[this.scriptCounter].choices);
+        } else {
+          console.log('Here 2');
+          this.hideChoices();
+        }
+        this.#nameTextObject.setText(this.script[this.scriptCounter].character);
+        this.#dialogueTextObject.setText(this.script[this.scriptCounter].text);
+      this.#character.updateCharacter(
+        this.script[this.scriptCounter].character,
+        this.script[this.scriptCounter].emotion,
+      );
       }
     });
 
     return this.#nextBtn;
   }
 
-  #createResetButton(scene) {
+  #createResetButton() {
     this.#resetBtn = this.#scene.add
       .rectangle(
         (this.#scene.game.scale.width / 20) * 0.25,
@@ -420,150 +341,174 @@ export class Dialouge {
       .setAlpha(1)
       .setInteractive();
     this.#resetBtn.on(Phaser.Input.Events.POINTER_DOWN, () => {
-      scene.start(SCENE_KEYS.TITLE);
+      this._scene.start(SCENE_KEYS.TITLE);
     });
-    return this.#resetBtn
+    return this.#resetBtn;
   }
 
-  #createTextArea(xpos, ypos, name, dialouge: string[]): void {
+  #createAuto() {
+    this.#autoTextObject = this.#scene.add.text(
+      (this.#scene.game.scale.width / 20) * 1.75,
+      (this.#scene.game.scale.height / 20) * 1.75,
+      'Auto On',
+      {
+        fontSize: '90px',
+        fontFamily: 'daffy',
+      },
+    );
+    this.#autoTextObject.setAlpha(0);
+    return this.#autoTextObject;
+  }
+
+  #createTextArea(xpos, ypos, name, dialogue: string): void {
     //Creates Name Text Area
     this.#mainTextAreaContainerGameObject = this.#scene.add.container(xpos, ypos, [
       this.#createNameBkgnd(),
       this.#createName(name),
-      this.#createDialougeBkgnd(),
-      this.#createDialouge(dialouge),
-      this.#createNextButton(dialouge),
+      this.#createDialogueBkgnd(),
+      this.#createDialogue(dialogue),
+      this.#createNextButton(this.chapter),
+      this.#createAuto(),
     ]);
   }
 
-  // /**
-  //  * @returns {void}
-  //  */
-  // #createMonsterAttackSubMenu() {
-  //   this.#attackBattleMenuCursorPhaserImageGameObject = this.#scene.add
-  //     .image(ATTACK_MENU_CURSOR_POS.x, ATTACK_MENU_CURSOR_POS.y, UI_ASSET_KEYS.CURSOR, 0)
-  //     .setOrigin(0.5)
-  //     .setScale(2.5);
+  #createChoiceBkgnd() {}
 
-  //   /** @type {string[]} */
-  //   const attackNames = [];
-  //   for (let i = 0; i < 4; i += 1) {
-  //     attackNames.push(this.#activePlayerMonster.attacks[i]?.name || '-');
-  //   }
-
-  //   this.#moveSelectionSubBattleMenuPhaserContainerGameObject = this.#scene.add.container(0, 448, [
-  //     this.#scene.add.text(55, 22, attackNames[0], BATTLE_UI_TEXT_STYLE),
-  //     this.#scene.add.text(240, 22, attackNames[1], BATTLE_UI_TEXT_STYLE),
-  //     this.#scene.add.text(55, 70, attackNames[2], BATTLE_UI_TEXT_STYLE),
-  //     this.#scene.add.text(240, 70, attackNames[3], BATTLE_UI_TEXT_STYLE),
-  //     this.#attackBattleMenuCursorPhaserImageGameObject,
-  //   ]);
-  //   this.hideMonsterAttackSubMenu();
-  // }
-
-  /**
-   * @returns {void}
-   */
-  #createMainDialougeSubPane() {
-    let rectHeight = 0;
-    let rectWidth = 0;
+  updateChoices(choices){
+    this.#choiceOneTextObject.setText(choices[0]);
+    this.#choiceTwoTextObject.setText(choices[1]);
+    this.#choiceThreeTextObject.setText(choices[2]);
+    console.log(choices[2]);
+    if (choices[2] == null) {
+      this.#choiceThreeTextObject.setAlpha(0);
+      this.#choiceThree.setAlpha(0);
+    }
   }
-  #createMainInfoPane() {
-    const padding = 4;
-    const rectHeight = 124;
-    //Maybe have to move rectangles into different function like in #createMainInfoSubPane()
-  }
-
-  /**
-   * @returns {Phaser.GameObjects.Rectangle}
-   */
-  #createMainInfoSubPane() {
-    const rectWidth = 500;
-    const rectHeight = 124;
-
-    return this.#scene.add
-      .rectangle(0, 0, rectWidth, rectHeight, 0xede4f3, 1)
+  #createChoiceOne(choice) {
+    this.#choiceOneTextObject = this.#scene.add
+      .text((this.#scene.game.scale.width / 20) *5, (this.#scene.game.scale.height / 20) * 5, choice, {
+        fontSize: '90px',
+        fontFamily: 'daffy',
+        color: '#000000'
+      })
+      .setDepth(2);
+    this.#choiceOne = this.#scene.add
+      .rectangle(
+        (this.#scene.game.scale.width / 20) * 5,
+        (this.#scene.game.scale.height / 20) * 5,
+        (this.#scene.game.scale.width / 20) * 10,
+        (this.#scene.game.scale.height / 20) * 3,
+        0xff11ff,
+      )
       .setOrigin(0)
-      .setStrokeStyle(8, 0x905ac2, 1);
+      .setInteractive();
+    this.#choiceOne.on(Phaser.Input.Events.POINTER_DOWN, () => {
+      console.log(choice);
+      this.scriptCounter += 1;
+      if (this.script[this.scriptCounter].choices) {
+        console.log('Here');
+        this.showChoices();
+        this.updateChoices(this.script[this.scriptCounter].choices);
+      } else {
+        console.log('Here 2');
+        this.hideChoices();
+      }
+      this.#nameTextObject.setText(this.script[this.scriptCounter].character);
+      this.#dialogueTextObject.setText(this.script[this.scriptCounter].text);
+      this.#character.updateCharacter(
+        this.script[this.scriptCounter].character,
+        this.script[this.scriptCounter].emotion,
+      );
+    });
+    return this.#choiceOne
   }
 
-  /**
-   * @returns {void}
-   */
-  #switchToMainBattleMenu() {
-    this.#waitingForPlayerInput = false;
-    // this.hideInputCursor();
-    // this.hideMonsterAttackSubMenu();
-    // this.showMainBattleMenu();
+  #createChoiceTwo(choice) {
+    this.#choiceTwoTextObject = this.#scene.add.text(
+      (this.#scene.game.scale.width / 20) * 5,
+      (this.#scene.game.scale.height / 20) * 10,
+      choice,
+      {
+        fontSize: '90px',
+        fontFamily: 'daffy',
+        color: '#000000',
+      },
+    ).setDepth(2);
+    this.#choiceTwo = this.#scene.add
+      .rectangle(
+        (this.#scene.game.scale.width / 20) * 5,
+        (this.#scene.game.scale.height / 20) * 10,
+        (this.#scene.game.scale.width / 20) * 10,
+        (this.#scene.game.scale.height / 20) * 3,
+        0xf11fff,
+      )
+      .setOrigin(0)
+      .setInteractive();
+    this.#choiceTwo.on(Phaser.Input.Events.POINTER_DOWN, () => {
+      console.log(choice);
+      this.scriptCounter += 1;
+      if (this.script[this.scriptCounter].choices) {
+        console.log('Here');
+        this.showChoices();
+        this.updateChoices(this.script[this.scriptCounter].choices);
+      } else {
+        console.log('Here 2');
+        this.hideChoices();
+      }
+      this.#nameTextObject.setText(this.script[this.scriptCounter].character);
+      this.#dialogueTextObject.setText(this.script[this.scriptCounter].text);
+      this.#character.updateCharacter(
+        this.script[this.scriptCounter].character,
+        this.script[this.scriptCounter].emotion
+      );
+    });
+    return this.#choiceTwo;
   }
-  /**
-   * @returns {void}
-   */
-  #handlePlayerChooseAttack() {
-    let selectedMoveIndex = 0;
-    switch (this.#selectedAttackMenuOption) {
-      case 1:
-        // case ATTACK_MOVE_OPTIONS.MOVE_1:
-        selectedMoveIndex = 0;
-        break;
-      case 2:
-        selectedMoveIndex = 1;
-        break;
-      case 3:
-        selectedMoveIndex = 2;
-        break;
-      case 4:
-        selectedMoveIndex = 3;
-        break;
-      default:
-      // exhaustiveGuard(this.#selectedAttackMenuOption);
-    }
-
-    this.#selectedAttackIndex = selectedMoveIndex;
+  #createChoiceThree(choice) {
+    this.#choiceThreeTextObject = this.#scene.add
+      .text((this.#scene.game.scale.width / 20) * 5, (this.#scene.game.scale.height / 20) * 15, choice, {
+        fontSize: '90px',
+        fontFamily: 'daffy',
+        color: '#000000',
+      })
+      .setDepth(2);
+    this.#choiceThree = this.#scene.add
+      .rectangle(
+        (this.#scene.game.scale.width / 20) * 5,
+        (this.#scene.game.scale.height / 20) * 15,
+        (this.#scene.game.scale.width / 20) * 10,
+        (this.#scene.game.scale.height / 20) * 3,
+        0xff11ff,
+      )
+      .setOrigin(0)
+      .setInteractive();
+    this.#choiceThree.on(Phaser.Input.Events.POINTER_DOWN, () => {
+      console.log(choice);
+      this.scriptCounter += 1;
+      if (this.script[this.scriptCounter].choices) {
+        console.log('Here');
+        this.showChoices();
+        this.updateChoices(this.script[this.scriptCounter].choices);
+      } else {
+        console.log('Here 2');
+        this.hideChoices();
+      }
+      this.#nameTextObject.setText(this.script[this.scriptCounter].character);
+      this.#dialogueTextObject.setText(this.script[this.scriptCounter].text);
+      this.#character.updateCharacter(
+        this.script[this.scriptCounter].character,
+        this.script[this.scriptCounter].emotion
+      );
+    });
+    return this.#choiceThree;
   }
 
-  // /**
-  //  * @returns {void}
-  //  */
-  // #createPlayerInputCursor() {
-  //   this.#userInputCursorPhaserImageGameObject = this.#scene.add.image(0, 0, UI_ASSET_KEYS.CURSOR);
-  //   this.#userInputCursorPhaserImageGameObject.setAngle(90).setScale(2.5, 1.25);
-  //   this.#userInputCursorPhaserImageGameObject.setAlpha(0);
-
-  //   this.#userInputCursorPhaserTween = this.#scene.add.tween({
-  //     delay: 0,
-  //     duration: 500,
-  //     repeat: -1,
-  //     y: {
-  //       from: PLAYER_INPUT_CURSOR_POS.y,
-  //       start: PLAYER_INPUT_CURSOR_POS.y,
-  //       to: PLAYER_INPUT_CURSOR_POS.y + 6,
-  //     },
-  //     targets: this.#userInputCursorPhaserImageGameObject,
-  //   });
-  //   this.#userInputCursorPhaserTween.pause();
-  // }
-
-  /**
-   * @param {Phaser.Scenes.Systems} sys
-   * @param {import('../../../scenes/battle-scene.js').BattleSceneWasResumedData} data
-   * @returns {void}
-   */
-  #handleSceneResume(sys, data) {
-    console.log(`[${Dialouge.name}:handleSceneResume] scene has been resumed, data provided: ${JSON.stringify(data)}`);
-
-    if (data && data.wasMonsterSelected) {
-      // do nothing since new active monster was chosen to switch to
-      return;
-    }
-
-    if (!data || !data.wasItemUsed) {
-      this.#switchToMainBattleMenu();
-      return;
-    }
-
-    this.#wasItemUsed = true;
-    this.#usedItem = data.item;
-    // this.updateInfoPaneMessagesAndWaitForInput([`You used the following item: ${data.item.name}`]);
+  #createChoiceArea(xpos, ypos, choices) {
+    this.#choiceTextAreaContainerGameObject = this.#scene.add.container(xpos, ypos, [
+      this.#createChoiceOne(choices[0]),
+      this.#createChoiceTwo(choices[1]),
+      this.#createChoiceThree(choices[2]),
+    ]);
+    this.hideChoices();
   }
 }

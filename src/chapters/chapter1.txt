@@ -1,0 +1,306 @@
+<SECTION intro>
+
+# SET VARIABLE
+${DAFFYPath} = 0
+${ASTERPath} = 0
+
+<BG homeroom FADE 1>
+<BGMUSIC PLAY bubbletea FADE 2>
+<WAIT 1>
+
+DAFFY It’s my first day at Kaisei High School. I arrived at my homeroom a few minutes early.
+
+DAFFY There’s two girls sitting next to me. We were all childhood friends.
+
+DAFFY On my left is DAFFY.
+
+<SHOW DAFFY.NEUTRAL 2 FADE 1>
+<WAIT 1>
+
+DAFFY DAFFY is the captain of the girls swim team. She’s really strong and could probably beat you in an arm wrestle.
+
+DAFFY Not only is she really athletic, but she is also really good at academics. 
+
+DAFFY She always helps me study for our history tests but I always end up flopping… somehow… but that’s just because I'm bad. Not because DAFFY is a bad teacher or anything!
+
+DAFFY She’s smart, beautiful, and stro… ok nothing, moving on.
+
+<HIDE DAFFY FADE 1>
+<SHOW ASTER.NEUTRAL 3 FADE 1>
+
+DAFFY On my right is ASTER. 
+
+DAFFY She’s well. She’s just a kid…
+
+DAFFY She likes to eat a lot of sashimi at the conveyor belt sushi bar. She also likes to read a lot of visual novels (not this one though cause it sucks).
+
+DAFFY However, she is awful at school. I don’t think she ever studied for tests in middle school and um. Her homework, she does her homework 5 minutes before class starts. But she’s also really cool!
+
+DAFFY I gave her that hat for her 11th birthday, and she hasn’t taken it off since… which is kind of weird but…
+
+DAFFY Moving on!
+
+<HIDE ASTER>
+<SHOW DAFFY.NEUTRAL,ASTER.NEUTRAL 2,3 FADE 2>
+
+DAFFY.NEUTRAL.CLOSE hey! How was your summer break!
+
+<CHOICE how was your break?>
+<OPTION Not that great. I was studying for the SAT>
+
+DAFFY.NEUTRAL.CLOSE aw that sucks. I already took it last year and got a perfect score.
+ASTER.ANGRY.CLOSE wow, what a tryhard nerd.
+${DAFFYPath} += 1
+
+</OPTION>
+<OPTION Really good! I went with ASTER to the movies.>
+
+DAFFY.NEUTRAL.CLOSE Tsk. I guess you forgot about me. But that’s alright, I forgive you.
+ASTER.NEUTRAL.CLOSE that’s because I’m more favored!
+${ASTERPath} += 1
+
+</OPTION>
+</CHOICE>
+
+<CHOICE which girl do you like better? (important)>
+<OPTION ASTER>
+${ASTERPath} += 1
+</OPTION>
+<OPTION DAFFY>
+${DAFFYPath} += 1
+</OPTION>
+</CHOICE>
+
+<VOICE narrator1>
+NARRATOR your choice will impact the future.
+
+<UNCLOSE>
+
+DAFFY Anyways, guys, what do you guys want to do after school?
+
+DAFFY.NEUTRAL.CLOSE Let’s go surfboarding! The weather is about to get cold
+ASTER.ANGRY.CLOSE hey. Come on. I don’t wanna get wet. Let’s go get some bubble tea.
+DAFFY.BLANK.CLOSE but bubble tea is boring… we already did that like so many times.
+ASTER.ANGRY.CLOSE yeah but I don’t wanna get wet!
+DAFFY.NEUTRAL.CLOSE i think we should let DAFFY decide since you were the one that asked the question in the first place.
+
+<CHOICE what do you wanna do?>
+<OPTION Go get bubble tea>
+
+${ASTERPath} += 1
+<UNCLOSE>
+<GOTO bubbletea>
+</OPTION>
+<OPTION Go surfboarding>
+
+${DAFFYPath} += 1
+<UNCLOSE>
+
+<GOTO surfboard>
+
+</OPTION>
+</CHOICE>
+</SECTION>
+
+<SECTION surfboard>
+<SHOW ASTER.ANGRY 3>
+ASTER.ANGRY i really thought I could trust you. But I guess you hate me.
+<HIDE ASTER,DAFFY FADE 2>
+<BG NONE FADE 2>
+<WAIT 2>
+<BG beach FADE 2>
+<BGMUSIC PLAY beach FADE 2>
+<WAIT 2>
+
+DAFFY wow the beach is beautiful
+
+<SHOW ASTER.NEUTRAL,DAFFY.NEUTRAL 2,3 FADE 1>
+<WAIT 0.5>
+
+DAFFY.NEUTRAL oh my gawd. I'm in love with the beach
+DAFFY.NEUTRAL (to herself): this would be the perfect place to confess. Only if ASTER wasn't here.
+
+ASTER.ANGRY why did we come here. it is FREEZING. IT IS LITERALLY FALL. WHY ARE WE GOING TO THE BEACH.
+DAFFY relax... it's not that bad. Just enjoy yourself while we're here
+
+ASTER.ANGRY.CLOSE NO I AM NOT ENJOYING MYSELF. I WANT BUBBLE TEA. I AM THIRSTY AND HUNGRY.
+DAFFY ...
+DAFFY.NEUTRAL ...
+<UNCLOSE>
+
+DAFFY (to yourself): ASTER has always been such a handful.
+DAFFY.NEUTRAL.CLOSE sooo do you want to play in the water together?
+
+DAFFY Sure!
+
+ASTER.BLANK.CLOSE (to herself): wow look at them, already playing in the water together. HMPFH!
+
+DAFFY.NEUTRAL.CLOSE (to herself): this is my chance. To become something more than friends!
+<UNCLOSE>
+DAFFY (to yourself): wow, I never noticed how beautiful DAFFY was...
+
+DAFFY anyways, let's go DAFFY!
+
+<HIDE ASTER,DAFFY FADE 1>
+<WAIT 1>
+
+<VOICE narrator2>
+NARRATOR you and DAFFY play together for hours
+
+<SHOW ASTER.NEUTRAL,DAFFY.NEUTRAL 2,3 FADE 1>
+<WAIT 1>
+DAFFY well, I think it's time we head back!
+DAFFY.BLANK.CLOSE (to herself): I was having so much fun I forgot about the whole confession.
+<UNCLOSE>
+<HIDE ASTER,DAFFY FADE 1>
+<GOTO ending>
+
+</SECTION>
+
+<SECTION bubbletea>
+<SHOW DAFFY.ANGRY 2>
+ASTER.NEUTRAL lets goo!!
+<HIDE ASTER,DAFFY FADE 2>
+<BG NONE FADE 2>
+<WAIT 2>
+<BG bubbletea FADE 2>
+<BGMUSIC PLAY actualbubbletea FADE 2>
+<WAIT 2>
+
+DAFFY so this is what bubble tea shops in the city are like huh.
+
+<SHOW ASTER.NEUTRAL,DAFFY.NEUTRAL 2,3 FADE 1>
+<WAIT 0.5>
+
+You I'm just so grateful that these girls are in my life... I want every day to be like this.
+
+<IF ${ASTERPath} > ${DAFFYPath}>
+ASTER.NEUTRAL.CLOSE hmm, what drink should I get?
+You ... does it really matter
+ASTER.ANGRY.CLOSE OF COURSE IT MATTERS. WHAT DO DAFFY MEAN???
+
+<CHOICE>
+<OPTION get regular milk tea>
+ASTER.ANGRY.CLOSE ... you are so lame
+${ASTERPath} -= 1
+</OPTION>
+<OPTION maybe try the cool new pumpkin flavor>
+ASTER.NEUTRAL.CLOSE i think that's a really good idea!
+${ASTERPath} += 1
+</OPTION>
+</CHOICE>
+
+<GOTO gettingTea>
+</IF>
+
+<IF ${DAFFYPath} > ${ASTERPath}>
+DAFFY.NEUTRAL.CLOSE i think im gonna just get the normal milk tea.
+ASTER.BLANK.CLOSE i can't believe you DAFFY. You're so lame.
+DAFFY.ANGRY.CLOSE shush. I can get what I want
+DAFFY guys guys, easy now, no need to fight over bubble tea.
+
+ASTER.BLANK we're not fighting
+DAFFY.BLANK yeah i don't know where you got that idea from
+
+DAFFY ANYWAYS
+<GOTO gettingTea>
+</IF>
+</SECTION>
+
+<SECTION gettingTea>
+<UNCLOSE>
+
+DAFFY i think i'm going to get... the apple flavor.
+
+<SHOW ASTER.ANGRY,DAFFY.BLANK 2,3>
+
+DAFFY.BLANK disgusting...
+ASTER.BLANK disgusting...
+DAFFY shush, I can get what I want.
+<HIDE DAFFY,ASTER FADE 2>
+<GOTO ending>
+</SECTION>
+
+<SECTION ending>
+<BG NONE FADE 2>
+<BGMUSIC END FADE 2>
+<WAIT 2>
+
+<BG homeroom FADE 1>
+<SHOW DAFFY.NEUTRAL,ASTER.NEUTRAL 2,3 FADE 1>
+<BGMUSIC PLAY bubbletea FADE 1>
+<WAIT 1>
+
+DAFFY ah what a day. that was a lot of fun guys!
+
+<IF ${ASTERPath} > ${DAFFYPath}>
+<GOTO ASTEREnding>
+</IF>
+<IF ${DAFFYPath} > ${ASTERPath}>
+<GOTO DAFFYEnding>
+</IF>
+
+<GOTO noEnding>
+</SECTION>
+
+<SECTION ASTEREnding>
+ASTER.NEUTRAL.CLOSE umm, excuse me?
+DAFFY yes?
+ASTER.NEUTRAL.CLOSE i just wanted to say that I,
+ASTER.NEUTRAL.CLOSE I
+ASTER.NEUTRAL.CLOSE I...
+DAFFY you what?
+ASTER.NEUTRAL.CLOSE I think I really like you and I want to get closer.
+DAFFY ASTER, you know, I've felt the same way about you for a really long time. I was waiting for the day you would ask.
+
+DAFFY.ANGRY.CLOSE WAIT ONE SECOND
+DAFFY.ANGRY.CLOSE I DO NOT APPROVE OF THIS
+DAFFY.ANGRY.CLOSE BECAUSE DAFFY ARE MINE!!!
+
+ASTER.BLANK.CLOSE you're not being serious are you
+DAFFY.ANGRY.CLOSE I AM. And back off. You were treated too kindly and now you're making moves like this.
+
+<UNCLOSE>
+
+DAFFY DAFFY...
+
+DAFFY.ANGRY.CLOSE im sorry, but, starting today, you aren't talking to her anymore.
+
+<UNCLOSE>
+
+<VOICE narrator3>
+NARRATOR and just like that, a childhood friendship, torn to pieces.
+<GOTO endingLogic>
+</SECTION>
+
+<SECTION DAFFYEnding>
+DAFFY.NEUTRAL.CLOSE HEY DAFFY!
+DAFFY yes?
+DAFFY.ANGRY.CLOSE I LIKE DAFFY! MARRY ME!
+ASTER.BLANK.CLOSE wait what.
+DAFFY.ANGRY.CLOSE I SAID WHAT I SAID. NOW MARRY ME
+DAFFY ok DAFFY. lets get married
+
+<UNCLOSE>
+
+<VOICE narrator4>
+NARRATOR you and DAFFY end up living happily ever after.
+<GOTO endingLogic>
+</SECTION>
+
+<SECTION noEnding>
+<VOICE narrator5>
+NARRATOR well, you didn't really favor any particular girl so. Nothing really happened.
+<VOICE narrator6>
+NARRATOR you really are a boring person.
+DAFFY wha...
+<GOTO endingLogic>
+</SECTION>
+
+<SECTION endingLogic>
+<HIDE DAFFY,ASTER FADE 2>
+<BG NONE FADE 2>
+<BGMUSIC END FADE 2>
+<WAIT 2>
+<END>
+</SECTION>
