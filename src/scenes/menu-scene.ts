@@ -29,7 +29,8 @@ export class MenuScene extends Phaser.Scene {
     const quitBtn = this.add.rectangle((this.scale.width / 20)*15, (this.scale.height / 20)*15, (this.scale.width / 20) * 5, (this.scale.height / 20) * 3, 0xff00ff)
     .setOrigin(0.5).setAlpha(0.8).setInteractive();
     quitBtn.on(Phaser.Input.Events.POINTER_DOWN, () => {
-      this.game.destroy(true)
+      // this.game.destroy(true)
+      this.scene.start(SCENE_KEYS.BACKGROUND);  
     })
   }
 }

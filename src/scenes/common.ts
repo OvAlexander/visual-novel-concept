@@ -5,7 +5,8 @@ export const SCENE_KEYS = {
   TEST: 'TEST',
   MENU: 'MENU',
   SETTING: 'SETTING',
-  UI: 'UI'
+  UI: 'UI',
+  BACKGROUND: 'BACKGROUND',
 } as const;
 
 export const ASSET_KEYS = {

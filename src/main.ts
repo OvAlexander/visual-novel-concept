@@ -6,6 +6,7 @@ import { TestScene } from './scenes/test-scene';
 import { MenuScene } from './scenes/menu-scene';
 import { SettingScene } from './scenes/setting-scene';
 import { UiScene } from './scenes/ui-scene';
+import { BackgroundScene } from './scenes/background-scene';
 
 
 const gameConfig: Phaser.Types.Core.GameConfig = {
@@ -19,7 +20,7 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,
   },
   backgroundColor: '#5c5b5b',
-  scene: [PreloadScene, TitleScene, GameScene, TestScene, MenuScene, SettingScene, UiScene],
+  scene: [PreloadScene, TitleScene, GameScene, TestScene, MenuScene, SettingScene, UiScene, BackgroundScene],
 };
 
 window.onload = () => {
