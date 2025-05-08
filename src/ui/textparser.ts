@@ -1,8 +1,12 @@
+import { ASSET_KEYS } from "../scenes/common";
+
 type DialogueLine = {
   character: string;
   emotion?: string;
   text: string;
   choices?: string[];
+  image?: keyof typeof ASSET_KEYS; // Reference to your asset keys
+  music?: keyof typeof ASSET_KEYS; // Reference to your asset keys
   lineNumber: number;
 };
 
@@ -17,9 +21,9 @@ export class TextParser {
   private parseLine(line: string, lineNumber: number): DialogueLine | null {
     if (!line || line.startsWith('#')) return null;
 
-    // Pattern: [Character][@Emotion] [Dialogue Text]
+    // Pattern: [Character][@Emotion] [Dialogue Text] [!image=] [!music=]
     const match = line.match(
-      /^(?:"(?<quotedChar>[^"]+)"|(?<unquotedChar>[^@\s]+))@?(?<emotion>\w+)?\s+(?<text>.+?)(?:\s*\[(?<choices>.*)\])?$/,
+      /^(?:"(?<quotedChar>[^"]+)"|(?<unquotedChar>[^@\s]+))@?(?<emotion>\w+)?\s+(?<text>.+?)(?:\s*\[(?<choices>.*)\])?(?:\s*!image=(?<image>\w+))?(?:\s*!music=(?<music>\w+))?$/,
     );
 
     if (!match?.groups) {
@@ -27,7 +31,7 @@ export class TextParser {
       return null;
     }
 
-    const { quotedChar, unquotedChar, emotion, text, choices } = match.groups;
+    const { quotedChar, unquotedChar, emotion, text, choices, image, music } = match.groups;
     const character = this.cleanCharacter(quotedChar || unquotedChar);
 
     const dialogueLine: DialogueLine = {
@@ -43,8 +47,18 @@ export class TextParser {
         .map((choice) => choice.trim())
         .filter((choice) => choice.length > 0);
     }
+    if (image) dialogueLine.image = this.validateAssetKey(image);
+    if (music) dialogueLine.music = this.validateAssetKey(music);
 
     return dialogueLine;
+  }
+  private validateAssetKey(key: string): keyof typeof ASSET_KEYS {
+    const upperKey = key.toUpperCase();
+    if (!(upperKey in ASSET_KEYS)) {
+      console.warn(`Invalid asset key: ${key}`);
+      return 'DAFFY' as keyof typeof ASSET_KEYS; // Fallback key
+    }
+    return upperKey as keyof typeof ASSET_KEYS;
   }
 
   private cleanCharacter(char: string): string {

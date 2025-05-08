@@ -5,6 +5,7 @@ import { ASSET_KEYS } from '../scenes/common';
 import { Menu } from './menu/menu';
 import { TextParser } from './textparser';
 import { ChapterReader } from './chapter-reader/chapter-reader';
+import { Background } from '../background/background';
 export class MainUi {
   /** @type {Phaser.Scene} */
   #scene;
@@ -20,6 +21,9 @@ export class MainUi {
 
   /** @type {ChapterReader} */
   #chapterReader;
+
+  /** @type {Background} */
+  #background;
 
   /** @type {string} */
   characterName = '';
@@ -57,7 +61,7 @@ export class MainUi {
       Daffy@happy But why not D:
     `;
     chapter = `
-      KOGA@HAPPY Hey Aya
+      KOGA@HAPPY Hey Aya !image=VINYL !music=BACKGROUND
       KOGA@HAPPY choices [Hi | Hello | What's Up]
       AYA@HAPPY   Heyyyy there KOGA!
       AYA@NEUTRAL What are you up to?
@@ -78,22 +82,21 @@ export class MainUi {
       KOGA@ANGRY WTF????
     `;
     this.#scene = scene;
-    this.#scene.add.image(0,0,ASSET_KEYS.KALE).setScale(0.505).setOrigin(0);
+    this.#scene.add.image(0, 0, ASSET_KEYS.KALE).setScale(0.505).setOrigin(0);
     this.#character = new Character(this.#scene, this, 0, 0, 'Daffy');
     this.#dialogue = new Dialogue(this, this.#scene, this, 0, 0, chapter, this.#character);
     this.#menu = new Menu(this.#scene, this, 0, 0, this.#dialogue);
     this.#chapterReader = new ChapterReader(this.#scene, this, chapter);
     this.updateUI();
-
   }
   updateUI() {
-    console.log("Updating UI on line " + this.scriptCounter + " of script")
+    console.log('Updating UI on line ' + this.scriptCounter + ' of script');
     this.characterName = this.#chapterReader.getCharacterName(this.scriptCounter);
     this.characterEmotion = this.#chapterReader.getCharacterEmotion(this.scriptCounter);
     this.dialogueChoices = this.#chapterReader.getDialogueChoices(this.scriptCounter);
     this.dialogueText = this.#chapterReader.getDialogueText(this.scriptCounter);
     this.script = this.#chapterReader.getScript();
-    this.scriptLength = this.script.length
+    this.scriptLength = this.script.length;
     this.#character.updateCharacter(this.characterName, this.characterEmotion);
     this.#dialogue.updateChoicesBox(this.dialogueChoices);
     this.#dialogue.updateDialogueBox(this.characterName, this.dialogueText);
