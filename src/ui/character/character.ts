@@ -22,61 +22,61 @@ export function getCharacterEmotionKey(character: CharacterName, emotion: Emotio
 
 
 export class Character {
-    /** @protected @type {Phaser.Scene} */
-    _scene;
-    /** @type {Phaser.Scene} */
-    #scene;
-    /** @type {integer} */
-    #xPos;
-    /** @type {integer} */
-    #yPos;
-    /** @type {string} */
-    name;
-    /** @type {Phaser.GameObjects.Image} */
-    #characterImageObject;
+  /** @protected @type {Phaser.Scene} */
+  _scene;
+  /** @type {Phaser.Scene} */
+  #scene;
+  /** @type {integer} */
+  #xPos;
+  /** @type {integer} */
+  #yPos;
+  /** @type {string} */
+  characterName;
+  /** @type {string} */
+  characterEmotion;
+  /** @type {Phaser.GameObjects.Image} */
+  #characterImageObject;
 
+  /** @type {Phaser.GameObjects.Container} */
+  #mainCharacterContainerGameObject;
+  /**
+   *
+   * @param {Phaser.Scene} scene the Phaser 3 Scene the battle menu will be added to
+   * @param {BattleMonster} activePlayerMonster the players current active monster in the current battle
+   * @param {boolean} [skipBattleAnimations=false] used to skip all animations tied to the battle
+   */
 
-    /** @type {Phaser.GameObjects.Container} */
-        #mainCharacterContainerGameObject
-    /**
-     *
-     * @param {Phaser.Scene} scene the Phaser 3 Scene the battle menu will be added to
-     * @param {BattleMonster} activePlayerMonster the players current active monster in the current battle
-     * @param {boolean} [skipBattleAnimations=false] used to skip all animations tied to the battle
-     */
+  constructor(scene, config, xPos, yPos, name) {
+    this.#scene = scene;
+    this.characterName;
+    this.#xPos = xPos;
+    this.#yPos = yPos;
+    this.characterName = "KOGA"
+    this.characterEmotion = "HAPPY"
+    this.#createCharacterArea(this.#xPos, this.#yPos, this.characterName, this.characterEmotion);
+  }
 
-    constructor(scene, config, xPos, yPos, name) {
-        this.#scene = scene;
-        this.name = name;
-        this.#xPos = xPos;
-        this.#yPos = yPos;
-        let image = ASSET_KEYS.DAFFY;
-        this.#createCharacterArea(this.#xPos, this.#yPos, this.name, ASSET_KEYS.DAFFY);
-    }
-    
-    #createCharacterImage(xpos, ypos, name, image) {
-        //Creates Name Text Area
-        this.#characterImageObject = this.#scene.add
-          .image((this.#scene.scale.width / 20) * 10, (this.#scene.scale.height / 20) * 10.0, ASSET_KEYS.DAFFY)
-          .setOrigin(0.5)
-          .setScale(0.4)
-          .setAngle(0);
-        return this.#characterImageObject
-    }
+  #createCharacterImage(name, emotion) {
+    //Creates Name Text Area
+    let characterImage = getCharacterEmotionKey(name, emotion)
+    this.#characterImageObject = this.#scene.add
+      .image((this.#scene.scale.width / 20) * 10, (this.#scene.scale.height / 20) * 10.0, characterImage)
+      .setOrigin(0.5)
+      .setScale(1)
+      .setAngle(0);
+    return this.#characterImageObject;
+  }
 
-    #createCharacterArea(xpos, ypos, name, image): void {
-        this.#mainCharacterContainerGameObject = this.#scene.add.container(xpos, ypos, [
-          this.#createCharacterImage(xpos, ypos, name, image),
-        ]);
-    }
+  #createCharacterArea(xpos, ypos, name, emotion): void {
+    this.#mainCharacterContainerGameObject = this.#scene.add.container(xpos, ypos, [
+      this.#createCharacterImage(name, emotion),
+    ]);
+  }
 
-    updateCharacter(name:CharacterName, emotion:Emotion){
-        let characterImage = getCharacterEmotionKey(name, emotion)
-        
-        console.log(name);  
-        // if (name == "ASTER"){
-        //     name = ASSET_KEYS.ASTER
-        // }
-        this.#characterImageObject.setTexture(characterImage)
-    }
+  updateCharacter(name: CharacterName, emotion: Emotion) {
+    let characterImage = getCharacterEmotionKey(name, emotion);
+
+    console.log("Updating character image with " + name + " : " + emotion);
+    this.#characterImageObject.setTexture(characterImage);
+  }
 }

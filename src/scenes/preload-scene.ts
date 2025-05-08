@@ -31,14 +31,16 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image(ASSET_KEYS.AYA_HAPPY, 'assets/temp_imgs/aya_happy.jpg');
     this.load.image(ASSET_KEYS.AYA_SAD, 'assets/temp_imgs/aya_sad.jpg');
     this.load.image(ASSET_KEYS.AYA_SHOCKED, 'assets/temp_imgs/aya_shocked.jpg');
+    this.load.image(ASSET_KEYS.AYA_SIDE, 'assets/temp_imgs/aya_side.jpg');
 
     this.load.image(ASSET_KEYS.KOGA_ANGRY, 'assets/temp_imgs/koga_angry.jpg');
     this.load.image(ASSET_KEYS.KOGA_EWW, 'assets/temp_imgs/koga_eww.jpg');
     this.load.image(ASSET_KEYS.KOGA_GASP, 'assets/temp_imgs/koga_gasp.jpg');
-    this.load.image(ASSET_KEYS.KOGA_NEUTRAL, 'assets/temp_imgs/koga_happy.jpg');
-    this.load.image(ASSET_KEYS.KOGA_HAPPY, 'assets/temp_imgs/koga_neutral.jpg');
+    this.load.image(ASSET_KEYS.KOGA_NEUTRAL, 'assets/temp_imgs/koga_neutral.jpg');
+    this.load.image(ASSET_KEYS.KOGA_HAPPY, 'assets/temp_imgs/koga_happy.jpg');
     this.load.image(ASSET_KEYS.KOGA_SAD, 'assets/temp_imgs/koga_sad.jpg');
     this.load.image(ASSET_KEYS.KOGA_SHOCKED, 'assets/temp_imgs/koga_shocked.jpg');
+    this.load.image(ASSET_KEYS.KALE, 'assets/temp_imgs/kale_feeling_yuri.png');
 
 
     // load custom fonts
