@@ -88,7 +88,7 @@ export class Dialogue {
   isDialogueBoxHidden = false;
 
   #timerId: ReturnType<typeof setInterval> | null = null;
-  intervalId;
+  timeoutId;
 
   /**
    *
@@ -105,7 +105,7 @@ export class Dialogue {
     this.#xPos = xPos;
     this.#yPos = yPos;
     this.#character = character;
-
+    this.timeoutId = null;
     this.parser = new TextParser();
     this.chapter = chapter;
     this.script = this.parser.parse(chapter);
@@ -188,14 +188,38 @@ export class Dialogue {
     if (this.auto) {
       console.log('Auto Off');
       this.auto = false;
-      clearInterval(this.intervalId);
-      this.intervalId = null;
+      clearInterval(this.timeoutId);
+      this.timeoutId = null;
       this.#autoTextObject.setAlpha(0);
     } else {
       console.log('Auto On');
       this.auto = true;
       this.#autoTextObject.setAlpha(1);
       console.log(this.scriptCounter);
+      
+
+    // Recursive function with dynamic timing
+    const advanceDialogue = () => {
+            if (!this.auto || this.#mainui.scriptCounter >= this.#mainui.scriptLength - 1) {
+                this.#autoTextObject.setAlpha(0);
+                this.auto = false;
+                return;
+            }
+            this.#mainui.scriptCounter++;
+            // Update UI with current line
+            this.#mainui.updateUI();
+
+            // Get timing from current line or default
+            const nextTiming = this.#mainui.timing || 2000; // Default 2 seconds
+            
+            // Schedule next advance with current line's timing
+            this.timeoutId = setTimeout(advanceDialogue, nextTiming);
+        };
+
+        // Start the sequence with first line's timing
+        const initialTiming = this.#mainui.script[this.#mainui.scriptCounter]?.timing || 2000;
+        this.timeoutId = setTimeout(advanceDialogue, initialTiming);
+    }
 
       //   this.intervalId = setInterval(() => {
       //     if (this.scriptCounter >= this.script.length - 1) {
@@ -225,21 +249,22 @@ export class Dialogue {
       //     console.log('Auto-incremented to:', this.scriptCounter);
       //   }, 2000);
       // }
-
-      this.intervalId = setInterval(() => {
-        if (this.#mainui.scriptCounter >= this.#mainui.scriptLength - 1) {
-          this.#autoTextObject.setAlpha(0);
-          console.log('Toggling off');
-          this.auto = false;
-          clearInterval(this.intervalId);
-          this.intervalId = null;
-          return;
-        }
-        this.#mainui.scriptCounter += 1;
-        this.#mainui.updateUI();
-        console.log('Auto-incremented to:', this.scriptCounter);
-      }, 2000);
-    }
+    //   let timing = this.#mainui.timing;
+    //   this.intervalId = setInterval(() => {
+    //     if (this.#mainui.scriptCounter >= this.#mainui.scriptLength - 1) {
+    //       this.#autoTextObject.setAlpha(0);
+    //       console.log('Toggling off');
+    //       this.auto = false;
+    //       clearInterval(this.intervalId);
+    //       this.intervalId = null;
+    //       return;
+    //     }
+    //     this.#mainui.scriptCounter += 1;
+    //     this.#mainui.updateUI();
+    //     timing = this.#mainui.timing;
+    //     console.log('Auto-incremented to:', this.#mainui.scriptCounter);
+    //     console.log(timing)
+    //   }, timing);
   }
   updateName(name) {
     this.name = name;

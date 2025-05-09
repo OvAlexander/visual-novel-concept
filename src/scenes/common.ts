@@ -45,6 +45,7 @@ export const ASSET_KEYS = {
   KOGA_SAD: 'KOGA_SAD',
   KOGA_SHOCKED: 'KOGA_SHOCKED',
   KALE: 'KALE',
+  CREEP: 'CREEP',
 } as const;
 
 export const CARD_WIDTH = 37;

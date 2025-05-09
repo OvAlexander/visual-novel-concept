@@ -42,12 +42,12 @@ export class ChapterReader {
   //     this.name = name;
   //     this.#nameTextObject.setText(name);
   //   }
-  getScript(){
+  getScript() {
     return this.#script;
   }
   getDialogueText(scriptCounter: integer) {
     console.log(this.#script[scriptCounter]);
-    console.log("Getting Text")
+    console.log('Getting Text');
     return this.#script[scriptCounter].text;
   }
   getCharacterName(scriptCounter: integer) {
@@ -61,5 +61,16 @@ export class ChapterReader {
   getDialogueChoices(scriptCounter: integer) {
     console.log('Getting Choices');
     return this.#script[scriptCounter].choices;
+  }
+  getImageAsset(scriptCounter: integer) {
+    console.log('Getting Choices');
+    return this.#script[scriptCounter].image;
+  }
+  getMusicAsset(scriptCounter: integer) {
+    console.log('Getting Choices');
+    return this.#script[scriptCounter].music;
+  }
+  getTiming(scriptCounter:integer){
+    return this.#script[scriptCounter].timing;
   }
 }

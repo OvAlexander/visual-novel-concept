@@ -42,6 +42,8 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image(ASSET_KEYS.KOGA_SHOCKED, 'assets/temp_imgs/koga_shocked.jpg');
     this.load.image(ASSET_KEYS.KALE, 'assets/temp_imgs/kale_feeling_yuri.png');
 
+    this.load.audio(ASSET_KEYS.CREEP, 'assets/sfx/creep.mp3')
+
 
     // load custom fonts
   }

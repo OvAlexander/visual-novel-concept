@@ -111,7 +111,9 @@ export class Menu {
       .setInteractive();
     this.#fastforwardImageObject.on(Phaser.Input.Events.POINTER_DOWN, () => {
       console.log("Auto Toggle")
+      
       this.#dialogue.autoDialogue();
+      this.#scene.sound.play(ASSET_KEYS.CREEP)
     });
     return this.#fastforwardImageObject;
   }

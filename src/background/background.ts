@@ -29,11 +29,11 @@ export class Background {
   constructor(scene, config, xPos, yPos, backgroundName) {
     // this.#createBackground()
     this.#scene = scene;
-    this.#createBackgroundAsset(50, 500, 300, 700, -40, 40, ASSET_KEYS.LILAC_ONE);
-    this.#loadBackgroundAsset(1000, 200, 20, ASSET_KEYS.MP3);
+    // this.createBackgroundAsset(50, 500, 300, 700, -40, 40, ASSET_KEYS.LILAC_ONE);
+    // this.#loadBackgroundAsset(1000, 200, 20, ASSET_KEYS.MP3);
   }
 
-  #createBackgroundAsset(xMinBound, xMaxBound, yMinBound, yMaxBound, rotationMin, rotationMax, assetName) {
+  createBackgroundAsset(xMinBound, xMaxBound, yMinBound, yMaxBound, rotationMin, rotationMax, assetName) {
     console.log('Creating Asset One');
 
     let screenWidth = this.#scene.game.config.width as number;
@@ -73,9 +73,9 @@ export class Background {
     }
 
     // Create elements with calculated bounds
-    const rect = this.#scene.add.rectangle(xPos, yPos, imageWidth, imageHeight, 0x1112ff).setOrigin(0).setAngle(rotation);
+    const rect = this.#scene.add.rectangle(xPos, yPos, imageWidth, imageHeight, 0x1112ff).setOrigin(0).setAngle(rotation).setDepth(0);
 
-    const image = this.#scene.add.image(xPos, yPos, assetName).setOrigin(0).setAngle(rotation);
+    const image = this.#scene.add.image(xPos, yPos, assetName).setOrigin(0).setAngle(rotation).setDepth(0);
 
 
     console.log('Creating Asset: ', assetName, ' at:\nx: ', xPos, '\ny: ', yPos, '\nRotation: ', rotation, '\n');
