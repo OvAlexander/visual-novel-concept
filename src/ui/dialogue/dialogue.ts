@@ -321,9 +321,6 @@ export class Dialogue {
     return this.#dialogueTextObject;
   }
 
-  // getDialogueText(dialogueCounter: integer){
-
-  // }
   updateDialogueBox(characterName: string, dialogueText: string) {
 
     if (this.isDialogueBoxHidden) {

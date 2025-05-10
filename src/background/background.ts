@@ -29,7 +29,7 @@ export class Background {
   constructor(scene, config, xPos, yPos, backgroundName) {
     // this.#createBackground()
     this.#scene = scene;
-    // this.createBackgroundAsset(50, 500, 300, 700, -40, 40, ASSET_KEYS.LILAC_ONE);
+    this.createBackgroundAsset(50, 500, 300, 700, -40, 40, ASSET_KEYS.LILAC_ONE);
     // this.#loadBackgroundAsset(1000, 200, 20, ASSET_KEYS.MP3);
   }
 
