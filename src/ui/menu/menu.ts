@@ -113,7 +113,7 @@ export class Menu {
       console.log("Auto Toggle")
       
       this.#dialogue.autoDialogue();
-      this.#scene.sound.play(ASSET_KEYS.CREEP)
+      // this.#scene.sound.play(ASSET_KEYS.CREEP)
     });
     return this.#fastforwardImageObject;
   }

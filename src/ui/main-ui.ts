@@ -70,7 +70,7 @@ export class MainUi {
       Daffy@happy But why not D:
     `;
     chapter = `
-      KOGA@HAPPY Hey Aya !image=VINYL !music=BACKGROUND !timing=
+      KOGA@HAPPY Hey Aya !image=VINYL !music=BACKGROUND
       KOGA@HAPPY choices [Hi | Hello | What's Up]
       AYA@HAPPY   Heyyyy there KOGA!
       AYA@NEUTRAL What are you up to?
@@ -117,7 +117,7 @@ export class MainUi {
     this.#character = new Character(this.#scene, this, 0, 0, 'Daffy');
     this.#dialogue = new Dialogue(this, this.#scene, this, 0, 0, chapter, this.#character);
     this.#menu = new Menu(this.#scene, this, 0, 0, this.#dialogue);
-    this.#chapterReader = new ChapterReader(this.#scene, this, creep);
+    this.#chapterReader = new ChapterReader(this.#scene, this, chapter);
     this.updateUI();
   }
   updateUI() {
