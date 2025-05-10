@@ -73,4 +73,7 @@ export class ChapterReader {
   getTiming(scriptCounter:integer){
     return this.#script[scriptCounter].timing;
   }
+  getAnimation(scriptCounter:integer){
+    return this.#script[scriptCounter].animation;
+  }
 }

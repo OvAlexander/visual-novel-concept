@@ -8,6 +8,7 @@ type DialogueLine = {
   image?: keyof typeof ASSET_KEYS; // Reference to your asset keys
   music?: keyof typeof ASSET_KEYS; // Reference to your asset keys
   timing?: number; // Duration in milliseconds
+  animation?: string;
   lineNumber: number;
 };
 
@@ -24,7 +25,7 @@ export class TextParser {
 
     // Pattern: [Character][@Emotion] [Dialogue Text] [!image=] [!music=] [!timing=]
     const match = line.match(
-      /^(?:"(?<quotedChar>[^"]+)"|(?<unquotedChar>[^@\s]+))@?(?<emotion>\w+)?\s+(?<text>.+?)(?:\s*\[(?<choices>.*)\])?(?:\s*!image=(?<image>\w+))?(?:\s*!music=(?<music>\w+))?(?:\s*!timing=(?<timing>\d+))?$/,
+      /^(?:"(?<quotedChar>[^"]+)"|(?<unquotedChar>[^@\s]+))@?(?<emotion>\w+)?\s+(?<text>.+?)(?:\s*\[(?<choices>.*)\])?(?:\s*!image=(?<image>\w+))?(?:\s*!music=(?<music>\w+))?(?:\s*!animation=(?<animation>\w+))?(?:\s*!timing=(?<timing>\d+))?$/,
     );
 
     if (!match?.groups) {
@@ -32,7 +33,7 @@ export class TextParser {
       return null;
     }
 
-    const { quotedChar, unquotedChar, emotion, text, choices, image, music, timing } = match.groups;
+    const { quotedChar, unquotedChar, emotion, text, choices, image, music, animation, timing } = match.groups;
     const character = this.cleanCharacter(quotedChar || unquotedChar);
 
     const dialogueLine: DialogueLine = {
@@ -50,6 +51,7 @@ export class TextParser {
     }
     if (image) dialogueLine.image = this.validateAssetKey(image);
     if (music) dialogueLine.music = this.validateAssetKey(music);
+    if (animation) dialogueLine.animation = animation;
     if (timing) {
       const timingValue = parseInt(timing, 10);
       dialogueLine.timing = timingValue > 0 ? timingValue : 3000;

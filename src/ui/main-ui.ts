@@ -40,6 +40,9 @@ export class MainUi {
   /** @type {string} */
   dialogueText = '';
 
+  /** @type {string} */
+  animation = '';
+
   /** @type {string[]} */
   dialogueChoices = ['', '', ''];
 
@@ -70,9 +73,9 @@ export class MainUi {
       Daffy@happy But why not D:
     `;
     chapter = `
-      KOGA@HAPPY Hey Aya !image=VINYL !music=BACKGROUND
+      KOGA@HAPPY Hey Aya !image=VINYL !music=BACKGROUND !animation=SHAKE
       KOGA@HAPPY choices [Hi | Hello | What's Up]
-      AYA@HAPPY   Heyyyy there KOGA!
+      AYA@HAPPY   Heyyyy there KOGA! !animation=SHAKE
       AYA@NEUTRAL What are you up to?
       KOGA@HAPPY Arson :D
       AYA@SHOCKED ARSON?!?!?!?!?!?
@@ -114,7 +117,7 @@ export class MainUi {
     this.#scene = scene;
     this.#background = new Background(this.#scene, this, 0, 0, 'main');
     this.#scene.add.image(0, 0, ASSET_KEYS.KALE).setScale(0.505).setOrigin(0);
-    this.#character = new Character(this.#scene, this, 0, 0, 'Daffy');
+    this.#character = new Character(this, this.#scene, this, 0, 0, 'Daffy');
     this.#dialogue = new Dialogue(this, this.#scene, this, 0, 0, chapter, this.#character);
     this.#menu = new Menu(this.#scene, this, 0, 0, this.#dialogue);
     this.#chapterReader = new ChapterReader(this.#scene, this, chapter);

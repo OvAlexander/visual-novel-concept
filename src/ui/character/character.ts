@@ -26,6 +26,9 @@ export class Character {
   _scene;
   /** @type {Phaser.Scene} */
   #scene;
+  /**@type {MainUi} */
+  #mainui;
+
   /** @type {integer} */
   #xPos;
   /** @type {integer} */
@@ -39,6 +42,10 @@ export class Character {
 
   /** @type {Phaser.GameObjects.Container} */
   #mainCharacterContainerGameObject;
+
+  isShaking = false;
+  shakeIntensity = 0;
+  originalPosition = { x: 0, y: 0 };
   /**
    *
    * @param {Phaser.Scene} scene the Phaser 3 Scene the battle menu will be added to
@@ -46,19 +53,20 @@ export class Character {
    * @param {boolean} [skipBattleAnimations=false] used to skip all animations tied to the battle
    */
 
-  constructor(scene, config, xPos, yPos, name) {
+  constructor(mainui: MainUi, scene, config, xPos, yPos, name) {
+    this.#mainui = mainui;
     this.#scene = scene;
     this.characterName;
     this.#xPos = xPos;
     this.#yPos = yPos;
-    this.characterName = "KOGA"
-    this.characterEmotion = "HAPPY"
+    this.characterName = 'KOGA';
+    this.characterEmotion = 'HAPPY';
     this.#createCharacterArea(this.#xPos, this.#yPos, this.characterName, this.characterEmotion);
   }
 
   #createCharacterImage(name, emotion) {
     //Creates Name Text Area
-    let characterImage = getCharacterEmotionKey(name, emotion)
+    let characterImage = getCharacterEmotionKey(name, emotion);
     this.#characterImageObject = this.#scene.add
       .image((this.#scene.scale.width / 20) * 10, (this.#scene.scale.height / 20) * 10.0, characterImage)
       .setOrigin(0.5)
@@ -76,7 +84,23 @@ export class Character {
   updateCharacter(name: CharacterName, emotion: Emotion) {
     let characterImage = getCharacterEmotionKey(name, emotion);
 
-    console.log("Updating character image with " + name + " : " + emotion);
+    console.log('Updating character image with ' + name + ' : ' + emotion);
     this.#characterImageObject.setTexture(characterImage);
+    if (1 === 1) {
+      this.shakeCharacter(this.#characterImageObject, 100000, 500000);
+    }
+  }
+
+  shakeCharacter(target: Phaser.GameObjects.Image, intensity: number, duration: number) {
+    console.log("Shaking Character")
+    this.isShaking = true;
+    this.shakeIntensity = intensity;
+    this.originalPosition = { x: target.width, y: target.height };
+
+    // Auto-stop after duration
+    this.#scene.time.delayedCall(duration, () => {
+      this.isShaking = false;
+      target.setPosition((this.#scene.scale.width / 20) * 10, (this.#scene.scale.height / 20) * 10.0);
+    });
   }
 }
