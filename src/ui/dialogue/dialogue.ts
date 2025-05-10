@@ -369,6 +369,13 @@ export class Dialogue {
       this.#choiceOneTextObject.setText(choices[0]);
       this.#choiceTwoTextObject.setText(choices[1]);
       this.#choiceThreeTextObject.setText(choices[2]);
+      if (choices.length === 2) {
+        this.#choiceThreeTextObject.setAlpha(0);
+        this.#choiceThree.setAlpha(0);
+      } else {
+        this.#choiceThreeTextObject.setAlpha(1);
+        this.#choiceThree.setAlpha(1);
+      }
     } else {
       console.log('Choices not found');
       this.hideChoices();
