@@ -421,7 +421,7 @@ export class Dialogue {
       this.#createDialogue(dialogue),
       this.#createNextButton(this.chapter),
       this.#createAuto(),
-    ]);
+    ]).setDepth(2);
   }
 
   #createChoiceBkgnd() {}

@@ -134,7 +134,7 @@ export class MainUi {
     // this.musicAsset = this.#chapterReader.getMusicAsset(this.musicAsset);
     this.script = this.#chapterReader.getScript();
     this.scriptLength = this.script.length;
-    // this.#background.createBackgroundAsset(50, 500, 300, 700, -40, 40, this.imageAsset);
+    this.#background.createBackgroundAsset(50, 500, 300, 700, -40, 40, this.imageAsset);
     this.#character.updateCharacter(this.characterName, this.characterEmotion);
     this.#dialogue.updateChoicesBox(this.dialogueChoices);
     this.#dialogue.updateDialogueBox(this.characterName, this.dialogueText);

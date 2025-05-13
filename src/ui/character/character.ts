@@ -79,6 +79,7 @@ export class Character {
     this.#mainCharacterContainerGameObject = this.#scene.add.container(xpos, ypos, [
       this.#createCharacterImage(name, emotion),
     ]);
+    this.#mainCharacterContainerGameObject.setDepth(1);
   }
 
   updateCharacter(name: CharacterName, emotion: Emotion) {
