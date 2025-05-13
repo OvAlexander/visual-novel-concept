@@ -353,6 +353,7 @@ export class Dialogue {
         } else {
           this.#mainui.scriptCounter += 1;
           this.#mainui.updateUI();
+          if(this.auto) { this.autoDialogue(); }
         }
       });
     return this.#nextBtn;
@@ -437,7 +438,7 @@ export class Dialogue {
   }
   #createChoiceOne(choice) {
     this.#choiceOneTextObject = this.#scene.add
-      .text((this.#scene.game.scale.width / 20) * 5, (this.#scene.game.scale.height / 20) * 5, choice, {
+      .text((this.#scene.game.scale.width / 20) * 5, (this.#scene.game.scale.height / 20) * 3, choice, {
         fontSize: '90px',
         fontFamily: 'daffy',
         color: '#000000',
@@ -446,7 +447,7 @@ export class Dialogue {
     this.#choiceOne = this.#scene.add
       .rectangle(
         (this.#scene.game.scale.width / 20) * 5,
-        (this.#scene.game.scale.height / 20) * 5,
+        (this.#scene.game.scale.height / 20) * 3,
         (this.#scene.game.scale.width / 20) * 10,
         (this.#scene.game.scale.height / 20) * 3,
         0xff11ff,
@@ -472,13 +473,16 @@ export class Dialogue {
       // );
       this.#mainui.scriptCounter += 1;
       this.#mainui.updateUI();
+      if (this.auto) {
+        this.autoDialogue();
+      }
     });
     return this.#choiceOne;
   }
 
   #createChoiceTwo(choice) {
     this.#choiceTwoTextObject = this.#scene.add
-      .text((this.#scene.game.scale.width / 20) * 5, (this.#scene.game.scale.height / 20) * 10, choice, {
+      .text((this.#scene.game.scale.width / 20) * 5, (this.#scene.game.scale.height / 20) * 7, choice, {
         fontSize: '90px',
         fontFamily: 'daffy',
         color: '#000000',
@@ -487,7 +491,7 @@ export class Dialogue {
     this.#choiceTwo = this.#scene.add
       .rectangle(
         (this.#scene.game.scale.width / 20) * 5,
-        (this.#scene.game.scale.height / 20) * 10,
+        (this.#scene.game.scale.height / 20) * 7,
         (this.#scene.game.scale.width / 20) * 10,
         (this.#scene.game.scale.height / 20) * 3,
         0xf11fff,
@@ -513,12 +517,15 @@ export class Dialogue {
       // );
       this.#mainui.scriptCounter += 1;
       this.#mainui.updateUI();
+      if (this.auto) {
+        this.autoDialogue();
+      }
     });
     return this.#choiceTwo;
   }
   #createChoiceThree(choice) {
     this.#choiceThreeTextObject = this.#scene.add
-      .text((this.#scene.game.scale.width / 20) * 5, (this.#scene.game.scale.height / 20) * 15, choice, {
+      .text((this.#scene.game.scale.width / 20) * 5, (this.#scene.game.scale.height / 20) * 11, choice, {
         fontSize: '90px',
         fontFamily: 'daffy',
         color: '#000000',
@@ -527,7 +534,7 @@ export class Dialogue {
     this.#choiceThree = this.#scene.add
       .rectangle(
         (this.#scene.game.scale.width / 20) * 5,
-        (this.#scene.game.scale.height / 20) * 15,
+        (this.#scene.game.scale.height / 20) * 11,
         (this.#scene.game.scale.width / 20) * 10,
         (this.#scene.game.scale.height / 20) * 3,
         0xff11ff,
@@ -553,6 +560,9 @@ export class Dialogue {
       // );
       this.#mainui.scriptCounter += 1;
       this.#mainui.updateUI();
+      if (this.auto) {
+        this.autoDialogue();
+      }
     });
     return this.#choiceThree;
   }
