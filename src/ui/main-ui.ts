@@ -61,6 +61,10 @@ export class MainUi {
   /** @type {boolean} */
   increment = true;
 
+  jumpAfterChoice: number | null = null;
+  choiceLineNumber: number | null = null;
+  numberOfChoices: number | null = null;
+
   constructor(scene) {
     let chapter = `
       Daffy@happy   Heyyyy there Aster! 
@@ -75,12 +79,15 @@ export class MainUi {
     chapter = `
       KOGA@HAPPY Hey Aya !image=VINYL !music=BACKGROUND !animation=SHAKE
       KOGA@HAPPY choices [Hi | Hello | What's Up]
-      AYA@HAPPY   Heyyyy there KOGA! !animation=SHAKE
+      AYA@HAPPY   Hi there, KOGA! !animation=SHAKE
+      AYA@SIDE   Hello, KOGA... !animation=SHAKE
+      AYA@SHOCKED   OMG! KOGA!!! What's up !animation=SHAKE
       AYA@NEUTRAL What are you up to?
       KOGA@HAPPY Arson :D
       AYA@SHOCKED ARSON?!?!?!?!?!?
-      AYA@SHOCKED   choices [Gross | Cringe ]
+      AYA@SHOCKED   choices [Gross | Shock ]
       AYA@EWW   Ewww why would you do that
+      AYA@SHOCKED   That's dangerous D:<
       KOGA@NEUTRAL They deserved it.
       AYA@GASP Whattt, what could they have possibly done?
       KOGA@EWW They looked at me funny
@@ -128,20 +135,32 @@ export class MainUi {
     this.characterName = this.#chapterReader.getCharacterName(this.scriptCounter);
     this.characterEmotion = this.#chapterReader.getCharacterEmotion(this.scriptCounter);
     this.dialogueChoices = this.#chapterReader.getDialogueChoices(this.scriptCounter);
+    if (this.dialogueChoices && this.dialogueChoices.length > 0) {
+      this.choiceLineNumber = this.scriptCounter;
+      this.numberOfChoices = this.dialogueChoices.length;
+    } else {
+      this.choiceLineNumber = null;
+      this.numberOfChoices = null;
+    }
     this.dialogueText = this.#chapterReader.getDialogueText(this.scriptCounter);
     this.imageAsset = this.#chapterReader.getImageAsset(this.scriptCounter);
     this.timing = this.#chapterReader.getTiming(this.scriptCounter);
     // this.musicAsset = this.#chapterReader.getMusicAsset(this.musicAsset);
     this.script = this.#chapterReader.getScript();
     this.scriptLength = this.script.length;
-    if(this.imageAsset) { this.#background.createBackgroundAsset(50, 500, 300, 700, -40, 40, this.imageAsset) }
+    // if(this.imageAsset) { this.#background.createBackgroundAsset(50, 300, 50, 400, -40, 40, this.imageAsset) }
     this.#character.updateCharacter(this.characterName, this.characterEmotion);
     this.#dialogue.updateChoicesBox(this.dialogueChoices);
     this.#dialogue.updateDialogueBox(this.characterName, this.dialogueText);
   }
   updateScriptCounter(increment: boolean) {
     if (this.increment) {
-      this.scriptCounter += 1;
+      if (this.jumpAfterChoice !== null) {
+        this.scriptCounter = this.jumpAfterChoice;
+        this.jumpAfterChoice = null;
+      } else {
+        this.scriptCounter += 1;
+      }
     } else {
       this.scriptCounter -= 1;
     }
