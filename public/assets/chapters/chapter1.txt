@@ -1,0 +1,19 @@
+KOGA@HAPPY Hey Aya !image=VINYL !music=BACKGROUND !animation=SHAKE
+KOGA@HAPPY choices [Hi | Hello | What's Up]
+AYA@HAPPY   Heyyyy there KOGA! !animation=SHAKE
+AYA@NEUTRAL What are you up to?
+KOGA@HAPPY Arson :D
+AYA@SHOCKED ARSON?!?!?!?!?!?
+AYA@SHOCKED   choices [Gross | Cringe ]
+AYA@EWW   Ewww why would you do that
+KOGA@NEUTRAL They deserved it.
+AYA@GASP Whattt, what could they have possibly done?
+KOGA@EWW They looked at me funny
+AYA@SAD Someone else looked at you? D:
+KOGA@GASP Ope!
+KOGA@SAD I didn't mean to make you feel bad.
+AYA@SIDE Its okay ...
+KOGA@SHOCKED   ...
+AYA@GASP le gasp
+AYA@ANGRY You're not gonnna comfort me?!?!?!
+KOGA@ANGRY WTF????
