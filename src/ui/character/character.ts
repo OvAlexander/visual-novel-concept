@@ -37,6 +37,10 @@ export class Character {
   characterName;
   /** @type {string} */
   characterEmotion;
+
+  /** @type {boolean} */
+  hideCharacter = false;
+
   /** @type {Phaser.GameObjects.Image} */
   #characterImageObject;
 
@@ -62,6 +66,21 @@ export class Character {
     this.characterName = 'KOGA';
     this.characterEmotion = 'HAPPY';
     this.#createCharacterArea(this.#xPos, this.#yPos, this.characterName, this.characterEmotion);
+  }
+
+  /**
+   * @returns {void}
+   */
+  hideCharacterModel() {
+    this.#characterImageObject.setAlpha(0);
+    this.hideCharacter = true;
+  }
+  /**
+   * @returns {void}
+   */
+  showCharacterModel() {
+    this.#characterImageObject.setAlpha(1);
+    this.hideCharacter = false;
   }
 
   #createCharacterImage(name, emotion) {
@@ -93,7 +112,7 @@ export class Character {
   }
 
   shakeCharacter(target: Phaser.GameObjects.Image, intensity: number, duration: number) {
-    console.log("Shaking Character")
+    console.log('Shaking Character');
     this.isShaking = true;
     this.shakeIntensity = intensity;
     this.originalPosition = { x: target.width, y: target.height };

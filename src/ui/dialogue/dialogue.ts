@@ -153,6 +153,7 @@ export class Dialogue {
     this.#choiceThreeTextObject.setAlpha(1);
     this.#nextBtn.setAlpha(0);
     this.hideDialogue();
+    this.#character.hideCharacterModel()
     this.hiddenChoices = false;
   }
 
@@ -171,6 +172,7 @@ export class Dialogue {
     this.#choiceThreeTextObject.setAlpha(0);
     this.#nextBtn.setAlpha(1);
     this.showDialogue();
+    this.#character.showCharacterModel();
     this.hiddenChoices = true;
   }
 
@@ -572,7 +574,7 @@ export class Dialogue {
       this.#createChoiceOne(choices[0]),
       this.#createChoiceTwo(choices[1]),
       this.#createChoiceThree(choices[2]),
-    ]);
+    ]).setDepth(1);
     this.hideChoices();
   }
 }
