@@ -44,6 +44,8 @@ export class PreloadScene extends Phaser.Scene {
 
     this.load.audio(ASSET_KEYS.CREEP, 'assets/sfx/creep.wav')
 
+    this.load.text(ASSET_KEYS.CHAPTER_ONE, 'assets/chapters/chapter1.txt');
+
 
     // load custom fonts
   }
