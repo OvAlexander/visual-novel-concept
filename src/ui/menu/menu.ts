@@ -61,6 +61,7 @@ export class Menu {
     this.#createMenuArea(xPos, yPos);
   }
 
+    // hide choices
   #createEyeButton(xPos, yPos, icon) {
     this.#eyeImageObject = this.#scene.add
       .image(xPos, yPos, icon)
@@ -101,6 +102,9 @@ export class Menu {
       .setInteractive();
     return this.#fileImageObject;
   }
+  // Reset time if dialogue is manually progressed
+  // make sure audio only plays once
+  // make dialogue not move on if tab is not focused
   #createFastforwardButton(xPos, yPos, icon) {
     this.#fastforwardImageObject = this.#scene.add
       .image(xPos, yPos, icon)
@@ -110,10 +114,10 @@ export class Menu {
       .setDepth(1)
       .setInteractive();
     this.#fastforwardImageObject.on(Phaser.Input.Events.POINTER_DOWN, () => {
-      console.log("Auto Toggle")
-      
+      console.log('Auto Toggle');
+
       this.#dialogue.autoDialogue();
-      // this.#scene.sound.play(ASSET_KEYS.CREEP)
+      // this.#scene.sound.play(ASSET_KEYS.CREEP);
     });
     return this.#fastforwardImageObject;
   }
