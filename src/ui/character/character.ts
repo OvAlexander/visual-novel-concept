@@ -68,6 +68,21 @@ export class Character {
     this.#createCharacterArea(this.#xPos, this.#yPos, this.characterName, this.characterEmotion);
   }
 
+  /**
+   * @returns {void}
+   */
+  hideCharacterModel() {
+    this.#characterImageObject.setAlpha(0);
+    this.hideCharacter = true;
+  }
+  /**
+   * @returns {void}
+   */
+  showCharacterModel() {
+    this.#characterImageObject.setAlpha(1);
+    this.hideCharacter = false;
+  }
+
   #createCharacterImage(name, emotion) {
     //Creates Name Text Area
     let characterImage = getCharacterEmotionKey(name, emotion);

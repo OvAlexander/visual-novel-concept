@@ -161,7 +161,7 @@ export class Dialogue {
    * @returns {void}
    */
   hideChoices() {
-    console.log("Hiding choices");
+    console.log('Hiding choices');
     // this.#choiceBkgnd.setAlpha(0);
     console.log('Hiding choices');
     this.#choiceOne.setAlpha(0);
@@ -172,7 +172,6 @@ export class Dialogue {
     this.#choiceThreeTextObject.setAlpha(0);
     this.#nextBtn.setAlpha(1);
     this.showDialogue();
-    this.#character.showCharacter();
     this.hiddenChoices = true;
   }
 
@@ -182,7 +181,7 @@ export class Dialogue {
     } else {
       this.#mainui.scriptCounter -= 1;
       console.log('Decreasing scriptCounter to: ' + this.#mainui.scriptCounter);
-      this.#mainui.updateUI();
+    this.#mainui.updateUI();
     }
   }
 
@@ -198,59 +197,58 @@ export class Dialogue {
       this.auto = true;
       this.#autoTextObject.setAlpha(1);
       console.log(this.scriptCounter);
-      
 
-    // Recursive function with dynamic timing
-    const advanceDialogue = () => {
-            if (!this.auto || this.#mainui.scriptCounter >= this.#mainui.scriptLength - 1) {
-                this.#autoTextObject.setAlpha(0);
-                this.auto = false;
-                return;
-            }
-            this.#mainui.scriptCounter++;
-            // Update UI with current line
-            this.#mainui.updateUI();
+      // Recursive function with dynamic timing
+      const advanceDialogue = () => {
+        if (!this.auto || this.#mainui.scriptCounter >= this.#mainui.scriptLength - 1) {
+          this.#autoTextObject.setAlpha(0);
+          this.auto = false;
+          return;
+        }
+        this.#mainui.scriptCounter++;
+        // Update UI with current line
+        this.#mainui.updateUI();
 
-            // Get timing from current line or default
-            const nextTiming = this.#mainui.timing || 2000; // Default 2 seconds
-            
-            // Schedule next advance with current line's timing
-            this.timeoutId = setTimeout(advanceDialogue, nextTiming);
-        };
+        // Get timing from current line or default
+        const nextTiming = this.#mainui.timing || 2000; // Default 2 seconds
 
-        // Start the sequence with first line's timing
-        const initialTiming = this.#mainui.script[this.#mainui.scriptCounter]?.timing || 2000;
-        this.timeoutId = setTimeout(advanceDialogue, initialTiming);
+        // Schedule next advance with current line's timing
+        this.timeoutId = setTimeout(advanceDialogue, nextTiming);
+      };
+
+      // Start the sequence with first line's timing
+      const initialTiming = this.#mainui.script[this.#mainui.scriptCounter]?.timing || 2000;
+      this.timeoutId = setTimeout(advanceDialogue, initialTiming);
     }
 
-      //   this.intervalId = setInterval(() => {
-      //     if (this.scriptCounter >= this.script.length - 1) {
-      //       this.#autoTextObject.setAlpha(0);
-      //       console.log('Toggling off');
-      //       this.auto = false;
-      //       clearInterval(this.intervalId);
-      //       this.intervalId = null;
-      //       return;
-      //     }
-      //     this.scriptCounter++;
-      //     if (this.script[this.scriptCounter].choices) {
-      //       this.#autoTextObject.setAlpha(0);
-      //       this.showChoices();
-      //       this.updateChoices(this.script[this.scriptCounter].choices);
-      //       console.log('Toggling off');
-      //       this.auto = false;
-      //       clearInterval(this.intervalId);
-      //       this.intervalId = null;
-      //       return;
-      //     } else {
-      //       console.log('Here 2');
-      //       this.hideChoices();
-      //     }
-      //     this.#nameTextObject.setText(this.script[this.scriptCounter].character);
-      //     this.#dialogueTextObject.setText(this.script[this.scriptCounter].text);
-      //     console.log('Auto-incremented to:', this.scriptCounter);
-      //   }, 2000);
-      // }
+    //   this.intervalId = setInterval(() => {
+    //     if (this.scriptCounter >= this.script.length - 1) {
+    //       this.#autoTextObject.setAlpha(0);
+    //       console.log('Toggling off');
+    //       this.auto = false;
+    //       clearInterval(this.intervalId);
+    //       this.intervalId = null;
+    //       return;
+    //     }
+    //     this.scriptCounter++;
+    //     if (this.script[this.scriptCounter].choices) {
+    //       this.#autoTextObject.setAlpha(0);
+    //       this.showChoices();
+    //       this.updateChoices(this.script[this.scriptCounter].choices);
+    //       console.log('Toggling off');
+    //       this.auto = false;
+    //       clearInterval(this.intervalId);
+    //       this.intervalId = null;
+    //       return;
+    //     } else {
+    //       console.log('Here 2');
+    //       this.hideChoices();
+    //     }
+    //     this.#nameTextObject.setText(this.script[this.scriptCounter].character);
+    //     this.#dialogueTextObject.setText(this.script[this.scriptCounter].text);
+    //     console.log('Auto-incremented to:', this.scriptCounter);
+    //   }, 2000);
+    // }
     //   let timing = this.#mainui.timing;
     //   this.intervalId = setInterval(() => {
     //     if (this.#mainui.scriptCounter >= this.#mainui.scriptLength - 1) {
@@ -324,13 +322,12 @@ export class Dialogue {
   }
 
   updateDialogueBox(characterName: string, dialogueText: string) {
-
     if (this.isDialogueBoxHidden) {
       this.hideDialogue;
     } else {
       this.showDialogue;
     }
-    console.log("Updating Dialogue Box with\nName: " + characterName + "\nDialogue: " + dialogueText);
+    console.log('Updating Dialogue Box with\nName: ' + characterName + '\nDialogue: ' + dialogueText);
     this.#nameTextObject.setText(characterName);
     this.#dialogueTextObject.setText(dialogueText);
   }
@@ -350,18 +347,20 @@ export class Dialogue {
 
     this.script = this.parser.parse(chapter);
     this.#nextBtn.on(Phaser.Input.Events.POINTER_DOWN, () => {
-        if (this.#mainui.scriptCounter + 1 >= this.#mainui.scriptLength || this.#mainui.scriptLength < 0) {
-          return;
-        } else {
-          this.#mainui.scriptCounter += 1;
-          this.#mainui.updateUI();
-          if(this.auto) { this.autoDialogue(); }
+      if (this.#mainui.scriptCounter + 1 >= this.#mainui.scriptLength || this.#mainui.scriptLength < 0) {
+        return;
+      } else {
+        this.#mainui.scriptCounter += 1;
+        this.#mainui.updateUI();
+        if (this.auto) {
+          this.autoDialogue();
         }
-      });
+      }
+    });
     return this.#nextBtn;
   }
 
-  updateChoicesBox(choices: string[]){
+  updateChoicesBox(choices: string[]) {
     if (choices) {
       console.log('Choices found');
       this.showChoices();
@@ -416,14 +415,16 @@ export class Dialogue {
 
   #createTextArea(xpos, ypos, name, dialogue: string): void {
     //Creates Name Text Area
-    this.#mainTextAreaContainerGameObject = this.#scene.add.container(xpos, ypos, [
-      this.#createNameBkgnd(),
-      this.#createName(name),
-      this.#createDialogueBkgnd(),
-      this.#createDialogue(dialogue),
-      this.#createNextButton(this.chapter),
-      this.#createAuto(),
-    ]).setDepth(2);
+    this.#mainTextAreaContainerGameObject = this.#scene.add
+      .container(xpos, ypos, [
+        this.#createNameBkgnd(),
+        this.#createName(name),
+        this.#createDialogueBkgnd(),
+        this.#createDialogue(dialogue),
+        this.#createNextButton(this.chapter),
+        this.#createAuto(),
+      ])
+      .setDepth(2);
   }
 
   #createChoiceBkgnd() {}
@@ -457,24 +458,15 @@ export class Dialogue {
       .setOrigin(0)
       .setInteractive();
     this.#choiceOne.on(Phaser.Input.Events.POINTER_DOWN, () => {
-      // console.log(choice);
-      // this.scriptCounter += 1;
-      // if (this.script[this.scriptCounter].choices) {
-      //   console.log('Here');
-      //   this.showChoices();
-      //   this.updateChoices(this.script[this.scriptCounter].choices);
-      // } else {
-      //   console.log('Here 2');
-      //   this.hideChoices();
-      // }
-      // this.#nameTextObject.setText(this.script[this.scriptCounter].character);
-      // this.#dialogueTextObject.setText(this.script[this.scriptCounter].text);
-      // this.#character.updateCharacter(
-      //   this.script[this.scriptCounter].character,
-      //   this.script[this.scriptCounter].emotion,
-      // );
-      this.#mainui.scriptCounter += 1;
-      this.#mainui.updateUI();
+      this.#mainui.history = []; 
+      if (this.#mainui.choiceLineNumber !== null && this.#mainui.numberOfChoices !== null) {
+        const choiceIndex = 0;
+        this.#mainui.scriptCounter = this.#mainui.choiceLineNumber + 1 + choiceIndex;
+        this.#mainui.jumpAfterChoice = this.#mainui.choiceLineNumber + 1 + this.#mainui.numberOfChoices;
+        console.log('LOOOK HERE BITCH ASS HOE' + this.#mainui.jumpAfterChoice);
+        console.log(this.#mainui.jumpAfterChoice);
+        this.#mainui.updateUI();
+      }
       if (this.auto) {
         this.autoDialogue();
       }
@@ -501,24 +493,13 @@ export class Dialogue {
       .setOrigin(0)
       .setInteractive();
     this.#choiceTwo.on(Phaser.Input.Events.POINTER_DOWN, () => {
-      // console.log(choice);
-      // this.scriptCounter += 1;
-      // if (this.script[this.scriptCounter].choices) {
-      //   console.log('Here');
-      //   this.showChoices();
-      //   this.updateChoices(this.script[this.scriptCounter].choices);
-      // } else {
-      //   console.log('Here 2');
-      //   this.hideChoices();
-      // }
-      // this.#nameTextObject.setText(this.script[this.scriptCounter].character);
-      // this.#dialogueTextObject.setText(this.script[this.scriptCounter].text);
-      // this.#character.updateCharacter(
-      //   this.script[this.scriptCounter].character,
-      //   this.script[this.scriptCounter].emotion,
-      // );
-      this.#mainui.scriptCounter += 1;
-      this.#mainui.updateUI();
+      this.#mainui.history = []; 
+      if (this.#mainui.choiceLineNumber !== null && this.#mainui.numberOfChoices !== null) {
+        const choiceIndex = 1;
+        this.#mainui.scriptCounter = this.#mainui.choiceLineNumber + 1 + choiceIndex;
+        this.#mainui.jumpAfterChoice = this.#mainui.choiceLineNumber + 1 + this.#mainui.numberOfChoices;
+        this.#mainui.updateUI();
+      }
       if (this.auto) {
         this.autoDialogue();
       }
@@ -544,24 +525,17 @@ export class Dialogue {
       .setOrigin(0)
       .setInteractive();
     this.#choiceThree.on(Phaser.Input.Events.POINTER_DOWN, () => {
-      // console.log(choice);
-      // this.scriptCounter += 1;
-      // if (this.script[this.scriptCounter].choices) {
-      //   console.log('Here');
-      //   this.showChoices();
-      //   this.updateChoices(this.script[this.scriptCounter].choices);
-      // } else {
-      //   console.log('Here 2');
-      //   this.hideChoices();
-      // }
-      // this.#nameTextObject.setText(this.script[this.scriptCounter].character);
-      // this.#dialogueTextObject.setText(this.script[this.scriptCounter].text);
-      // this.#character.updateCharacter(
-      //   this.script[this.scriptCounter].character,
-      //   this.script[this.scriptCounter].emotion,
-      // );
-      this.#mainui.scriptCounter += 1;
-      this.#mainui.updateUI();
+      this.#mainui.history = []; 
+      if (
+        this.#mainui.choiceLineNumber !== null &&
+        this.#mainui.numberOfChoices !== null &&
+        this.#mainui.numberOfChoices > 2
+      ) {
+        const choiceIndex = 2;
+        this.#mainui.scriptCounter = this.#mainui.choiceLineNumber + 1 + choiceIndex;
+        this.#mainui.jumpAfterChoice = this.#mainui.choiceLineNumber + 1 + this.#mainui.numberOfChoices;
+        this.#mainui.updateUI();
+      }
       if (this.auto) {
         this.autoDialogue();
       }
@@ -574,7 +548,7 @@ export class Dialogue {
       this.#createChoiceOne(choices[0]),
       this.#createChoiceTwo(choices[1]),
       this.#createChoiceThree(choices[2]),
-    ]).setDepth(2);
+    ]);
     this.hideChoices();
   }
 }
