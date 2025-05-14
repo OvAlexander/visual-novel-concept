@@ -443,7 +443,7 @@ export class Dialogue {
         fontFamily: 'daffy',
         color: '#000000',
       })
-      .setDepth(2);
+      .setDepth(3);
     this.#choiceOne = this.#scene.add
       .rectangle(
         (this.#scene.game.scale.width / 20) * 5,
@@ -487,7 +487,7 @@ export class Dialogue {
         fontFamily: 'daffy',
         color: '#000000',
       })
-      .setDepth(2);
+      .setDepth(3);
     this.#choiceTwo = this.#scene.add
       .rectangle(
         (this.#scene.game.scale.width / 20) * 5,
@@ -530,7 +530,7 @@ export class Dialogue {
         fontFamily: 'daffy',
         color: '#000000',
       })
-      .setDepth(2);
+      .setDepth(3);
     this.#choiceThree = this.#scene.add
       .rectangle(
         (this.#scene.game.scale.width / 20) * 5,
@@ -572,7 +572,7 @@ export class Dialogue {
       this.#createChoiceOne(choices[0]),
       this.#createChoiceTwo(choices[1]),
       this.#createChoiceThree(choices[2]),
-    ]);
+    ]).setDepth(2);
     this.hideChoices();
   }
 }
