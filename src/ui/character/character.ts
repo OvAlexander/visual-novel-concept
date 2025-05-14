@@ -73,14 +73,14 @@ export class Character {
    */
   hideCharacterModel() {
     this.#characterImageObject.setAlpha(0);
-    this.hideCharacter = true;
+    this.isCharacterHidden = true;
   }
   /**
    * @returns {void}
    */
   showCharacterModel() {
     this.#characterImageObject.setAlpha(1);
-    this.hideCharacter = false;
+    this.isCharacterHidden = false;
   }
 
   #createCharacterImage(name, emotion) {
