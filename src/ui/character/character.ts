@@ -37,6 +37,10 @@ export class Character {
   characterName;
   /** @type {string} */
   characterEmotion;
+
+  /** @type {boolean} */
+  isCharacterHidden;
+
   /** @type {Phaser.GameObjects.Image} */
   #characterImageObject;
 
@@ -82,6 +86,16 @@ export class Character {
     this.#mainCharacterContainerGameObject.setDepth(1);
   }
 
+  hideCharacter() {
+    this.#characterImageObject.setAlpha(0)
+    this.isCharacterHidden = true
+  }
+
+  showCharacter() {
+    this.#characterImageObject.setAlpha(1);
+    this.isCharacterHidden = false;
+  }
+
   updateCharacter(name: CharacterName, emotion: Emotion) {
     let characterImage = getCharacterEmotionKey(name, emotion);
 
@@ -93,7 +107,7 @@ export class Character {
   }
 
   shakeCharacter(target: Phaser.GameObjects.Image, intensity: number, duration: number) {
-    console.log("Shaking Character")
+    console.log('Shaking Character');
     this.isShaking = true;
     this.shakeIntensity = intensity;
     this.originalPosition = { x: target.width, y: target.height };
