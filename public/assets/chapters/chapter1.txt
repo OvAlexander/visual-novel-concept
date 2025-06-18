@@ -1,5 +1,22 @@
 KOGA@HAPPY Hey Aya !image=VINYL !music=BACKGROUND !animation=SHAKE
+Hey Aya !character=KOGA !emotion=HAPPY !image=VINYL !music=BACKGROUND !animation=SHAKE
+!choice={
+    Text,
+    Hey Aya !character=KOGA !emotion=HAPPY !image=VINYL !music=BACKGROUND !animation=SHAKE
+    }
+!choice=
+
+choice = {
+    previousNode(implicit),
+    choiceText,
+    nextNode
+}
+
+code that makes new nodes for us
+
 KOGA@HAPPY choices [Hi | Hello | What's Up]
+
+
 AYA@HAPPY   Heyyyy there KOGA! !animation=SHAKE
 AYA@NEUTRAL What are you up to?
 KOGA@HAPPY Arson :D
@@ -17,3 +34,7 @@ KOGA@SHOCKED   ...
 AYA@GASP le gasp
 AYA@ANGRY You're not gonnna comfort me?!?!?!
 KOGA@ANGRY WTF????
+
+{line 1} {line 2}
+{line 1
+line 2}
