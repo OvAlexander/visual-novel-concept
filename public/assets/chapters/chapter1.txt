@@ -1,15 +1,12 @@
 KOGA@HAPPY Hey Aya !image=VINYL !music=BACKGROUND !animation=SHAKE
 Hey Aya !character=KOGA !emotion=HAPPY !image=VINYL !music=BACKGROUND !animation=SHAKE
-!choice={
-    Text,
-    Hey Aya !character=KOGA !emotion=HAPPY !image=VINYL !music=BACKGROUND !animation=SHAKE
-    }
+!choice={ Text, Hey Aya !character=KOGA !emotion=HAPPY !image=VINYL !music=BACKGROUND !animation=SHAKE}
 !choice=
 
 choice = {
     previousNode(implicit),
     choiceText,
-    nextNode
+    tunnel
 }
 
 code that makes new nodes for us
@@ -38,3 +35,10 @@ KOGA@ANGRY WTF????
 {line 1} {line 2}
 {line 1
 line 2}
+
+==tunnel1==
+AYA@HAPPY   Heyyyy there KOGA! !animation=SHAKE
+AYA@NEUTRAL What are you up to?
+KOGA@HAPPY Arson :D
+AYA@SHOCKED ARSON?!?!?
+--> return
